@@ -6,14 +6,14 @@ function renderData() {
     console.log("datajson is" + JSON.stringify(datajson))
 
     const DashboardRow = () => (
-        <tbody>
+        <tbody id="selectable">
             {datajson.map((data, i) => (
                 <tr key={i}>
-                    <td>{data.transactionId}</td>
+                    <td className="transactionid">{data.transactionId}</td>
                     <td>{data.timestamp}</td>
                     <td>{data.amount ? data.amount : data.resources[0].value}</td>
                     <td>{data.asset ? data.asset : data.resources[0].clientWalletID ? data.resources[0].clientWalletID : "--"}</td>
-                    <td>{data.asset2 ? data.asset2 : data.resources[0].merchantWalletID ? data.resources[0].merchantWalletID : "--"}</td> 
+                    <td>{data.asset2 ? data.asset2 : data.resources[0].merchantWalletID ? data.resources[0].merchantWalletID : "--"}</td>
                     <td>{data.$class}</td>
                     <td>{data.resources ? data.resources[0].$class : "--"}</td>
                 </tr>
@@ -35,10 +35,26 @@ function renderData() {
                         <th><i className="fa fa-info"></i> Transaction Class </th>
                     </tr>
                 </thead>
-                <DashboardRow/>
+                <DashboardRow />
             </table>
         </div>,
-        document.getElementById("dashboard")
+        document.getElementById("dashboard"),
+        () => {
+            console.log("rendererd");
+            $("#selectable").selectable({
+                filter: 'tr',
+                stop: function () {
+                    var result = ""
+                    $(".ui-selected", this).each(function () {
+                        var index = $(this).find(".transactionid").text();
+                        result += ("row " + index + "\n");     
+                    })
+                    alert("Selected " + result)
+                }
+            });
+        }
     )
     TableDatatablesButtons.init();
+
+
 }
