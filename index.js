@@ -4,6 +4,7 @@ var bodyParser = require('body-parser'); //parse POST data
 var session = require('express-session'); //temporary to store sensitive data, see if theres better way
 const database = require("./nodemodjs/DBReader.js");
 const databaseReader = require("./nodemodjs/DatabaseReader.js")
+const blokchainReader = require("./nodemodjs/blokchainReader.js")
 const express = require('express'); //express is good
 const app = express();
 const port = 5101;
@@ -84,7 +85,7 @@ app.get('/unsettled', function (req, res) {
 app.get('/blockchain', function (req, res) { 
     res.render(path.join(__dirname + '/html/blockchain.html'),
         {
-            data: JSON.stringify(databaseReader.dataGEN("sample"))
+            data: JSON.stringify(blokchainReader.retrieveData())
         });
 });
 
