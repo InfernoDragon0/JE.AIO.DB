@@ -851,7 +851,7 @@ function GetSuccess(date1, date2) {
                 for (var i = 0; i < value.body.length; i++) {
                     var money = 0;
 
-                    var createTime = new Date(value.body[i].create_at)
+                    var createTime = new Date(value.body[i].created_at)
                     createTime = createTime.getTime();
 
                     var dateStart = new Date(date1)
@@ -905,7 +905,7 @@ function GetMerchantSuccess(date1, date2, merchantId) {
                 for (var i = 0; i < value.body.length; i++) {
                     var money = 0;
 
-                    var createTime = new Date(value.body[i].create_at)
+                    var createTime = new Date(value.body[i].created_at)
                     createTime = createTime.getTime();
 
                     var dateStart = new Date(date1)
@@ -960,7 +960,7 @@ function GetCompleted(date1, date2) {
                 for (var i = 0; i < value.body.length; i++) {
                     var money = 0;
 
-                    var createTime = new Date(value.body[i].create_at)
+                    var createTime = new Date(value.body[i].created_at)
                     createTime = createTime.getTime();
 
                     var dateStart = new Date(date1)
@@ -1015,7 +1015,7 @@ function GetMerchantCompleted(date1, date2, merchantId) {
                 for (var i = 0; i < value.body.length; i++) {
                     var money = 0;
 
-                    var createTime = new Date(value.body[i].create_at)
+                    var createTime = new Date(value.body[i].created_at)
                     createTime = createTime.getTime();
 
                     var dateStart = new Date(date1)
