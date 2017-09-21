@@ -2,7 +2,6 @@ var ejs = require('ejs'); //ejs is not express, but is a extension to express
 var path = require("path"); //pathing system
 var bodyParser = require('body-parser'); //parse POST data
 var session = require('express-session'); //temporary to store sensitive data, see if theres better way
-const database = require("./nodemodjs/DBReader.js");
 const databaseReader = require("./nodemodjs/DatabaseReader.js")
 const blokchainReader = require("./nodemodjs/blokchainReader.js")
 const express = require('express'); //express is good
@@ -15,7 +14,7 @@ app.use(session({
     resave: true, //force save
     saveUninitialized: true,
     /*cookie: { secure: true }*/
-})); //secure needs HTTPS, cookies will not be stored if running from HTTP with this option
+})); //secure needs HTTPS, cookies will not be stored if running from Hconst database = require("./nodemodjs/DBReader.js");TTP with this option
 app.use(bodyParser.json()); // supporting POST data
 app.use(bodyParser.urlencoded({ extended: true })); // supportting POST data
 

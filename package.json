@@ -15,5 +15,8 @@
     "express": "^4.15.4",
     "express-router": "0.0.1",
     "express-session": "^1.15.5"
+  },
+  "dependencies": {
+    "superagent": "^3.6.0"
   }
 }

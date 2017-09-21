@@ -1,8 +1,283 @@
-//read from db, then send to merchant_index via ejs
+const dbAPI = require("./databaseApiCallp2.js")
 module.exports.ATransactiondata = ATransactiondata;
+var ATransactiondata
+// retrieve transaction from DB for adminDB
+var opendata = dbAPI.retrieveTransactions()
+opendata.then((value) => {
+  ATransactiondata = value
+})
+
+var date = "2017-09-18T12:08:54.079256"
+
+if (date < "2017-09-19T00:00:00.999999" && date > "2017-09-14T00:00:00.00000") {
+  console.log("yes")
+
+}
+else {
+  console.log("no")
+}
+// formate data for chart
+formatData(ATransactiondata, 2017)
+
+function formatData(data, year) {
+  // January
+  var janWeek1Orders = 0
+  var janWeek2Orders = 0
+  var janWeek3Orders = 0
+  var janWeek4Orders = 0
+  var janWeek1Income = 0
+  var janWeek2Income = 0
+  var janWeek3Income = 0
+  var janWeek4Income = 0
+  var janWk1S = "2017-01-01T00:00:00.00000"
+  var janWk1E = "2017-01-07T23:59:59.999999"
+  var janWk2S = "2017-01-08T00:00:00.00000"
+  var janWk2E = "2017-01-14T23:59:59.999999"
+  var janWk3S = "2017-01-15T00:00:00.00000"
+  var janWk3E = "2017-01-21T23:59:59.999999"
+  var janWk4S = "2017-01-22T00:00:00.00000"
+  var janWk4E = "2017-01-31T23:59:59.999999"
+
+  for (var counter = 0; counter < data.length; counter++) {
+    //JanWeek1
+    if (data[counter].create_at > janWk1S && data[counter].create_at < janWk1E){
+      janWeek1Orders = janWeek1Orders + 1
+      janWeek1Income = janWeek1Income + data[counter].transaction_amount
+    }
+    //JanWeek2
+    if (data[counter].create_at > janWk2S && data[counter].create_at < janWk2E){
+      janWeek2Orders = janWeek2Orders + 1
+      janWeek2Income = janWeek2Income + data[counter].transaction_amount
+    }
+     //JanWeek3
+    if (data[counter].create_at > janWk3S && data[counter].create_at < janWk3E){
+      janWeek3Orders = janWeek3Orders + 1
+      janWeek3Income = janWeek3Income + data[counter].transaction_amount
+    }
+     //JanWeek4
+    if (data[counter].create_at > janWk4S && data[counter].create_at < janWk4E){
+      janWeek4Orders = janWeek4Orders + 1
+      janWeek4Income = janWeek4Income + data[counter].transaction_amount
+    }
+  }
+
+  var Mchartdata =
+    {
+      year:
+      {
+        'jan':
+        {
+          'week1Orders': janWeek1Orders,
+          'week1income': janWeek1Income,
+          'week2Orders': janWeek2Orders,
+          'week2income': janWeek2Income,
+          'week3Orders': janWeek3Orders,
+          'week3income': janWeek3Income,
+          'week4Orders': janWeek4Orders,
+          'week4income': janWeek4Income,
+        }
+        ,
+        'feb':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'mar':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'apr':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'may':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'jun':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'jul':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'aug':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'sep':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'oct':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'nov':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'dec':
+        {
+          'week1Orders': 10,
+          'week1income': 20,
+          'week2Orders': 10,
+          'week2income': 20,
+          'week3Orders': 10,
+          'week3income': 20,
+          'week4Orders': 10,
+          'week4income': 20,
+        }
+        ,
+        'janTotalOrder': 100,
+        'janIncome': 200,
+        'febTotalOrder': 100,
+        'febIncome': 200,
+        'marTotalOrder': 100,
+        'marIncome': 200,
+        'aprTotalOrder': 100,
+        'aprIncome': 200,
+        'mayTotalOrder': 100,
+        'mayIncome': 200,
+        'junTotalOrder': 100,
+        'junIncome': 200,
+        'julTotalOrder': 100,
+        'julIncome': 200,
+        'augTotalOrder': 100,
+        'augIncome': 200,
+        'sepTotalOrder': 100,
+        'sepIncome': 200,
+        'octTotalOrder': 100,
+        'octIncome': 200,
+        'novTotalOrder': 100,
+        'novIncome': 200,
+        'decTotalOrder': 100,
+        'decIncome': 200,
+      }
+
+    };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Test Functions
+//read from db, then send to merchant_index via ejs
+
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 ///AdminDashboardData///
-var ATransactiondata = [{
+var ATranssssactiondata = [{
   "transaction_id": "fcefeeda3cf7",
   "user_id": "12345",
   "merchant_name": "AUSTRALIAN AGRICULTURAL COMPANY LIMITED",
@@ -120,7 +395,7 @@ var ATransactiondata = [{
   "transaction_type": 1
 }];
 
-function ATransactiondataGEN(input) { 
+function ATransactiondataGEN(input) {
   return ATransactiondata
 };
 
@@ -139,555 +414,555 @@ module.exports.genYearBody = genYearBody;
 module.exports.Mchartdata = Mchartdata;
 
 var Mchartdata =
+  {
+    "2017":
     {
-        "2017":
-        {
-            'jan':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 20,
-                'week2income': 30,
-                'week3Orders': 30,
-                'week3income': 40,
-                'week4Orders': 40,
-                'week4income': 50,
-            }
-            ,
-            'feb':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'mar':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'apr':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'may':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'jun':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'jul':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'aug':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'sep':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'oct':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'nov':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'dec':
-            {
-                'week1Orders': 10,
-                'week1income': 20,
-                'week2Orders': 10,
-                'week2income': 20,
-                'week3Orders': 10,
-                'week3income': 20,
-                'week4Orders': 10,
-                'week4income': 20,
-            }
-            ,
-            'janTotalOrder': 100,
-            'janIncome': 200,
-            'febTotalOrder': 100,
-            'febIncome': 200,
-            'marTotalOrder': 100,
-            'marIncome': 200,
-            'aprTotalOrder': 100,
-            'aprIncome': 200,
-            'mayTotalOrder': 100,
-            'mayIncome': 200,
-            'junTotalOrder': 100,
-            'junIncome': 200,
-            'julTotalOrder': 100,
-            'julIncome': 200,
-            'augTotalOrder': 100,
-            'augIncome': 200,
-            'sepTotalOrder': 100,
-            'sepIncome': 200,
-            'octTotalOrder': 100,
-            'octIncome': 200,
-            'novTotalOrder': 100,
-            'novIncome': 200,
-            'decTotalOrder': 100,
-            'decIncome': 200,
-        }
+      'jan':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 20,
+        'week2income': 30,
+        'week3Orders': 30,
+        'week3income': 40,
+        'week4Orders': 40,
+        'week4income': 50,
+      }
+      ,
+      'feb':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'mar':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'apr':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'may':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'jun':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'jul':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'aug':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'sep':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'oct':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'nov':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'dec':
+      {
+        'week1Orders': 10,
+        'week1income': 20,
+        'week2Orders': 10,
+        'week2income': 20,
+        'week3Orders': 10,
+        'week3income': 20,
+        'week4Orders': 10,
+        'week4income': 20,
+      }
+      ,
+      'janTotalOrder': 100,
+      'janIncome': 200,
+      'febTotalOrder': 100,
+      'febIncome': 200,
+      'marTotalOrder': 100,
+      'marIncome': 200,
+      'aprTotalOrder': 100,
+      'aprIncome': 200,
+      'mayTotalOrder': 100,
+      'mayIncome': 200,
+      'junTotalOrder': 100,
+      'junIncome': 200,
+      'julTotalOrder': 100,
+      'julIncome': 200,
+      'augTotalOrder': 100,
+      'augIncome': 200,
+      'sepTotalOrder': 100,
+      'sepIncome': 200,
+      'octTotalOrder': 100,
+      'octIncome': 200,
+      'novTotalOrder': 100,
+      'novIncome': 200,
+      'decTotalOrder': 100,
+      'decIncome': 200,
+    }
 
-    };
+  };
 
 
 //genweekBody(data,'2017','jan')
 
 function genweekBody(datax, year) { //datax change to data for production
-    return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
-        var weekBody = {
-            'jan': [{
+    var weekBody = {
+      'jan': [{
 
-                "date": "Jan Week 1",
-                "totalOrders": Mchartdata[year]['jan'].week1Orders,
-                "income": Mchartdata[year]['jan'].week1income
-            },
-            {
+        "date": "Jan Week 1",
+        "totalOrders": Mchartdata[year]['jan'].week1Orders,
+        "income": Mchartdata[year]['jan'].week1income
+      },
+      {
 
-                "date": "Jan Week 2",
-                "totalOrders": Mchartdata[year]['jan'].week2Orders,
-                "income": Mchartdata[year]['jan'].week2income
-            },
-            {
+        "date": "Jan Week 2",
+        "totalOrders": Mchartdata[year]['jan'].week2Orders,
+        "income": Mchartdata[year]['jan'].week2income
+      },
+      {
 
-                "date":  "Jan Week 3",
-                "totalOrders": Mchartdata[year]['jan'].week3Orders,
-                "income": Mchartdata[year]['jan'].week3income
-            },
-            {
+        "date": "Jan Week 3",
+        "totalOrders": Mchartdata[year]['jan'].week3Orders,
+        "income": Mchartdata[year]['jan'].week3income
+      },
+      {
 
-                "date": "Jan Week 4",
-                "totalOrders": Mchartdata[year]['jan'].week4Orders,
-                "income": Mchartdata[year]['jan'].week4income
-            }
-            ],
-            'feb': [{
+        "date": "Jan Week 4",
+        "totalOrders": Mchartdata[year]['jan'].week4Orders,
+        "income": Mchartdata[year]['jan'].week4income
+      }
+      ],
+      'feb': [{
 
-                "date": "Feb Week 1",
-                "totalOrders": Mchartdata[year]['feb'].week1Orders,
-                "income": Mchartdata[year]['feb'].week1income
-            },
-            {
+        "date": "Feb Week 1",
+        "totalOrders": Mchartdata[year]['feb'].week1Orders,
+        "income": Mchartdata[year]['feb'].week1income
+      },
+      {
 
-                "date":   "Feb Week 2",
-                "totalOrders": Mchartdata[year]['feb'].week2Orders,
-                "income": Mchartdata[year]['feb'].week2income
-            },
-            {
+        "date": "Feb Week 2",
+        "totalOrders": Mchartdata[year]['feb'].week2Orders,
+        "income": Mchartdata[year]['feb'].week2income
+      },
+      {
 
-                "date":   "Feb Week 3",
-                "totalOrders": Mchartdata[year]['feb'].week3Orders,
-                "income": Mchartdata[year]['feb'].week3income
-            },
-            {
+        "date": "Feb Week 3",
+        "totalOrders": Mchartdata[year]['feb'].week3Orders,
+        "income": Mchartdata[year]['feb'].week3income
+      },
+      {
 
-                "date":   "Feb Week 4",
-                "totalOrders": Mchartdata[year]['feb'].week4Orders,
-                "income": Mchartdata[year]['feb'].week4income
-            }
-            ],
-            'mar': [{
+        "date": "Feb Week 4",
+        "totalOrders": Mchartdata[year]['feb'].week4Orders,
+        "income": Mchartdata[year]['feb'].week4income
+      }
+      ],
+      'mar': [{
 
-                "date":   "Mar Week 1",
-                "totalOrders": Mchartdata[year]['mar'].week1Orders,
-                "income": Mchartdata[year]['mar'].week1income
-            },
-            {
+        "date": "Mar Week 1",
+        "totalOrders": Mchartdata[year]['mar'].week1Orders,
+        "income": Mchartdata[year]['mar'].week1income
+      },
+      {
 
-                "date":   "Mar Week 2",
-                "totalOrders": Mchartdata[year]['mar'].week2Orders,
-                "income": Mchartdata[year]['mar'].week2income
-            },
-            {
+        "date": "Mar Week 2",
+        "totalOrders": Mchartdata[year]['mar'].week2Orders,
+        "income": Mchartdata[year]['mar'].week2income
+      },
+      {
 
-                "date":   "Mar Week 3",
-                "totalOrders": Mchartdata[year]['mar'].week3Orders,
-                "income": Mchartdata[year]['mar'].week3income
-            },
-            {
+        "date": "Mar Week 3",
+        "totalOrders": Mchartdata[year]['mar'].week3Orders,
+        "income": Mchartdata[year]['mar'].week3income
+      },
+      {
 
-                "date":   "Mar Week 4",
-                "totalOrders": Mchartdata[year]['mar'].week4Orders,
-                "income": Mchartdata[year]['mar'].week4income
-            }
-            ],
-            'apr': [{
+        "date": "Mar Week 4",
+        "totalOrders": Mchartdata[year]['mar'].week4Orders,
+        "income": Mchartdata[year]['mar'].week4income
+      }
+      ],
+      'apr': [{
 
-                "date":   "Apr Week 1",
-                "totalOrders": Mchartdata[year]['apr'].week1Orders,
-                "income": Mchartdata[year]['apr'].week1income
-            },
-            {
+        "date": "Apr Week 1",
+        "totalOrders": Mchartdata[year]['apr'].week1Orders,
+        "income": Mchartdata[year]['apr'].week1income
+      },
+      {
 
-                "date":   "Apr Week 2",
-                "totalOrders": Mchartdata[year]['apr'].week2Orders,
-                "income": Mchartdata[year]['apr'].week2income
-            },
-            {
+        "date": "Apr Week 2",
+        "totalOrders": Mchartdata[year]['apr'].week2Orders,
+        "income": Mchartdata[year]['apr'].week2income
+      },
+      {
 
-                "date":   "Apr Week 3",
-                "totalOrders": Mchartdata[year]['apr'].week3Orders,
-                "income": Mchartdata[year]['apr'].week3income
-            },
-            {
+        "date": "Apr Week 3",
+        "totalOrders": Mchartdata[year]['apr'].week3Orders,
+        "income": Mchartdata[year]['apr'].week3income
+      },
+      {
 
-                "date":   "Apr Week 4",
-                "totalOrders": Mchartdata[year]['apr'].week4Orders,
-                "income": Mchartdata[year]['apr'].week4income
-            }
-            ],
-            'may': [{
+        "date": "Apr Week 4",
+        "totalOrders": Mchartdata[year]['apr'].week4Orders,
+        "income": Mchartdata[year]['apr'].week4income
+      }
+      ],
+      'may': [{
 
-                "date":   "May Week 1",
-                "totalOrders": Mchartdata[year]['may'].week1Orders,
-                "income": Mchartdata[year]['may'].week1income
-            },
-            {
+        "date": "May Week 1",
+        "totalOrders": Mchartdata[year]['may'].week1Orders,
+        "income": Mchartdata[year]['may'].week1income
+      },
+      {
 
-                "date":   "May Week 2",
-                "totalOrders": Mchartdata[year]['may'].week2Orders,
-                "income": Mchartdata[year]['may'].week2income
-            },
-            {
+        "date": "May Week 2",
+        "totalOrders": Mchartdata[year]['may'].week2Orders,
+        "income": Mchartdata[year]['may'].week2income
+      },
+      {
 
-                "date":   "May Week 3",
-                "totalOrders": Mchartdata[year]['may'].week3Orders,
-                "income": Mchartdata[year]['may'].week3income
-            },
-            {
+        "date": "May Week 3",
+        "totalOrders": Mchartdata[year]['may'].week3Orders,
+        "income": Mchartdata[year]['may'].week3income
+      },
+      {
 
-                "date":   "May Week 4",
-                "totalOrders": Mchartdata[year]['may'].week4Orders,
-                "income": Mchartdata[year]['may'].week4income
-            }
-            ],
-            'jun': [{
+        "date": "May Week 4",
+        "totalOrders": Mchartdata[year]['may'].week4Orders,
+        "income": Mchartdata[year]['may'].week4income
+      }
+      ],
+      'jun': [{
 
-                "date":   "Jun Week 1",
-                "totalOrders": Mchartdata[year]['jun'].week1Orders,
-                "income": Mchartdata[year]['jun'].week1income
-            },
-            {
+        "date": "Jun Week 1",
+        "totalOrders": Mchartdata[year]['jun'].week1Orders,
+        "income": Mchartdata[year]['jun'].week1income
+      },
+      {
 
-                "date":   "Jun Week 2",
-                "totalOrders": Mchartdata[year]['jun'].week2Orders,
-                "income": Mchartdata[year]['jun'].week2income
-            },
-            {
+        "date": "Jun Week 2",
+        "totalOrders": Mchartdata[year]['jun'].week2Orders,
+        "income": Mchartdata[year]['jun'].week2income
+      },
+      {
 
-                "date":   "Jun Week 3",
-                "totalOrders": Mchartdata[year]['jun'].week3Orders,
-                "income": Mchartdata[year]['jun'].week3income
-            },
-            {
+        "date": "Jun Week 3",
+        "totalOrders": Mchartdata[year]['jun'].week3Orders,
+        "income": Mchartdata[year]['jun'].week3income
+      },
+      {
 
-                "date":   "Jun Week 4",
-                "totalOrders": Mchartdata[year]['jun'].week4Orders,
-                "income": Mchartdata[year]['jun'].week4income
-            }
-            ],
-            'jul': [{
+        "date": "Jun Week 4",
+        "totalOrders": Mchartdata[year]['jun'].week4Orders,
+        "income": Mchartdata[year]['jun'].week4income
+      }
+      ],
+      'jul': [{
 
-                "date":   "Jul Week 1",
-                "totalOrders": Mchartdata[year]['jul'].week1Orders,
-                "income": Mchartdata[year]['jul'].week1income
-            },
-            {
+        "date": "Jul Week 1",
+        "totalOrders": Mchartdata[year]['jul'].week1Orders,
+        "income": Mchartdata[year]['jul'].week1income
+      },
+      {
 
-                "date":   "Jul Week 2",
-                "totalOrders": Mchartdata[year]['jul'].week2Orders,
-                "income": Mchartdata[year]['jul'].week2income
-            },
-            {
+        "date": "Jul Week 2",
+        "totalOrders": Mchartdata[year]['jul'].week2Orders,
+        "income": Mchartdata[year]['jul'].week2income
+      },
+      {
 
-                "date":   "Jul Week 3",
-                "totalOrders": Mchartdata[year]['jul'].week3Orders,
-                "income": Mchartdata[year]['jul'].week3income
-            },
-            {
+        "date": "Jul Week 3",
+        "totalOrders": Mchartdata[year]['jul'].week3Orders,
+        "income": Mchartdata[year]['jul'].week3income
+      },
+      {
 
-                "date":   "Jul Week 4",
-                "totalOrders": Mchartdata[year]['jul'].week4Orders,
-                "income": Mchartdata[year]['jul'].week4income
-            }
-            ],
-            'aug': [{
+        "date": "Jul Week 4",
+        "totalOrders": Mchartdata[year]['jul'].week4Orders,
+        "income": Mchartdata[year]['jul'].week4income
+      }
+      ],
+      'aug': [{
 
-                "date":   "Aug Week 1",
-                "totalOrders": Mchartdata[year]['aug'].week1Orders,
-                "income": Mchartdata[year]['aug'].week1income
-            },
-            {
+        "date": "Aug Week 1",
+        "totalOrders": Mchartdata[year]['aug'].week1Orders,
+        "income": Mchartdata[year]['aug'].week1income
+      },
+      {
 
-                "date":   "Aug Week 2",
-                "totalOrders": Mchartdata[year]['aug'].week2Orders,
-                "income": Mchartdata[year]['aug'].week2income
-            },
-            {
+        "date": "Aug Week 2",
+        "totalOrders": Mchartdata[year]['aug'].week2Orders,
+        "income": Mchartdata[year]['aug'].week2income
+      },
+      {
 
-                "date":   "Aug Week 3",
-                "totalOrders": Mchartdata[year]['aug'].week3Orders,
-                "income": Mchartdata[year]['aug'].week3income
-            },
-            {
+        "date": "Aug Week 3",
+        "totalOrders": Mchartdata[year]['aug'].week3Orders,
+        "income": Mchartdata[year]['aug'].week3income
+      },
+      {
 
-                "date":   "Aug Week 4",
-                "totalOrders": Mchartdata[year]['aug'].week4Orders,
-                "income": Mchartdata[year]['aug'].week4income
-            }
-            ],
-            'sep': [{
+        "date": "Aug Week 4",
+        "totalOrders": Mchartdata[year]['aug'].week4Orders,
+        "income": Mchartdata[year]['aug'].week4income
+      }
+      ],
+      'sep': [{
 
-                "date":   "Sep Week 1",
-                "totalOrders": Mchartdata[year]['sep'].week1Orders,
-                "income": Mchartdata[year]['sep'].week1income
-            },
-            {
+        "date": "Sep Week 1",
+        "totalOrders": Mchartdata[year]['sep'].week1Orders,
+        "income": Mchartdata[year]['sep'].week1income
+      },
+      {
 
-                "date":   "Sep Week 2",
-                "totalOrders": Mchartdata[year]['sep'].week2Orders,
-                "income": Mchartdata[year]['sep'].week2income
-            },
-            {
+        "date": "Sep Week 2",
+        "totalOrders": Mchartdata[year]['sep'].week2Orders,
+        "income": Mchartdata[year]['sep'].week2income
+      },
+      {
 
-                "date":   "Sep Week 3",
-                "totalOrders": Mchartdata[year]['sep'].week3Orders,
-                "income": Mchartdata[year]['sep'].week3income
-            },
-            {
+        "date": "Sep Week 3",
+        "totalOrders": Mchartdata[year]['sep'].week3Orders,
+        "income": Mchartdata[year]['sep'].week3income
+      },
+      {
 
-                "date":   "Sep Week 4",
-                "totalOrders": Mchartdata[year]['sep'].week4Orders,
-                "income": Mchartdata[year]['sep'].week4income
-            }
-            ],
-            'oct': [{
+        "date": "Sep Week 4",
+        "totalOrders": Mchartdata[year]['sep'].week4Orders,
+        "income": Mchartdata[year]['sep'].week4income
+      }
+      ],
+      'oct': [{
 
-                "date":   "Oct Week 1",
-                "totalOrders": Mchartdata[year]['oct'].week1Orders,
-                "income": Mchartdata[year]['oct'].week1income
-            },
-            {
+        "date": "Oct Week 1",
+        "totalOrders": Mchartdata[year]['oct'].week1Orders,
+        "income": Mchartdata[year]['oct'].week1income
+      },
+      {
 
-                "date":   "Oct Week 2",
-                "totalOrders": Mchartdata[year]['oct'].week2Orders,
-                "income": Mchartdata[year]['oct'].week2income
-            },
-            {
+        "date": "Oct Week 2",
+        "totalOrders": Mchartdata[year]['oct'].week2Orders,
+        "income": Mchartdata[year]['oct'].week2income
+      },
+      {
 
-                "date":   "Oct Week 3",
-                "totalOrders": Mchartdata[year]['oct'].week3Orders,
-                "income": Mchartdata[year]['oct'].week3income
-            },
-            {
+        "date": "Oct Week 3",
+        "totalOrders": Mchartdata[year]['oct'].week3Orders,
+        "income": Mchartdata[year]['oct'].week3income
+      },
+      {
 
-                "date":   "Oct Week 4",
-                "totalOrders": Mchartdata[year]['oct'].week4Orders,
-                "income": Mchartdata[year]['oct'].week4income
-            }
-            ],
-        'nov': [{
+        "date": "Oct Week 4",
+        "totalOrders": Mchartdata[year]['oct'].week4Orders,
+        "income": Mchartdata[year]['oct'].week4income
+      }
+      ],
+      'nov': [{
 
-                "date":   "Nov Week 1",
-                "totalOrders": Mchartdata[year]['nov'].week1Orders,
-                "income": Mchartdata[year]['nov'].week1income
-            },
-            {
+        "date": "Nov Week 1",
+        "totalOrders": Mchartdata[year]['nov'].week1Orders,
+        "income": Mchartdata[year]['nov'].week1income
+      },
+      {
 
-                "date":   "Nov Week 2",
-                "totalOrders": Mchartdata[year]['nov'].week2Orders,
-                "income": Mchartdata[year]['nov'].week2income
-            },
-            {
+        "date": "Nov Week 2",
+        "totalOrders": Mchartdata[year]['nov'].week2Orders,
+        "income": Mchartdata[year]['nov'].week2income
+      },
+      {
 
-                "date":   "Nov Week 3",
-                "totalOrders": Mchartdata[year]['nov'].week3Orders,
-                "income": Mchartdata[year]['nov'].week3income
-            },
-            {
+        "date": "Nov Week 3",
+        "totalOrders": Mchartdata[year]['nov'].week3Orders,
+        "income": Mchartdata[year]['nov'].week3income
+      },
+      {
 
-                "date":   "Nov Week 4",
-                "totalOrders": Mchartdata[year]['nov'].week4Orders,
-                "income": Mchartdata[year]['nov'].week4income
-            }
-            ],
-        'dec': [{
+        "date": "Nov Week 4",
+        "totalOrders": Mchartdata[year]['nov'].week4Orders,
+        "income": Mchartdata[year]['nov'].week4income
+      }
+      ],
+      'dec': [{
 
-                "date":   "Dec Week 1",
-                "totalOrders": Mchartdata[year]['dec'].week1Orders,
-                "income": Mchartdata[year]['dec'].week1income
-            },
-            {
+        "date": "Dec Week 1",
+        "totalOrders": Mchartdata[year]['dec'].week1Orders,
+        "income": Mchartdata[year]['dec'].week1income
+      },
+      {
 
-                "date":   "Dec Week 2",
-                "totalOrders": Mchartdata[year]['dec'].week2Orders,
-                "income": Mchartdata[year]['dec'].week2income
-            },
-            {
+        "date": "Dec Week 2",
+        "totalOrders": Mchartdata[year]['dec'].week2Orders,
+        "income": Mchartdata[year]['dec'].week2income
+      },
+      {
 
-                "date":   "Dec Week 3",
-                "totalOrders": Mchartdata[year]['dec'].week3Orders,
-                "income": Mchartdata[year]['dec'].week3income
-            },
-            {
+        "date": "Dec Week 3",
+        "totalOrders": Mchartdata[year]['dec'].week3Orders,
+        "income": Mchartdata[year]['dec'].week3income
+      },
+      {
 
-                "date":   "Dec Week 4",
-                "totalOrders": Mchartdata[year]['dec'].week4Orders,
-                "income": Mchartdata[year]['dec'].week4income
-            }
-            ],
+        "date": "Dec Week 4",
+        "totalOrders": Mchartdata[year]['dec'].week4Orders,
+        "income": Mchartdata[year]['dec'].week4income
+      }
+      ],
 
-        };
-        resolve(weekBody);
-        console.log("hihihihihi"+weekBody['jan']);
-    });
+    };
+    resolve(weekBody);
+    console.log("hihihihihi" + weekBody['jan']);
+  });
 };
 
 
 
 
 function genYearBody(datax, year) { //change back to data from datax when real data is ready
-    return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
-        var yearBody = [{
+    var yearBody = [{
 
-            "date": "Jan",
-            "totalOrders": Mchartdata[year].janTotalOrder,
-            "income": Mchartdata[year].janIncome
-        }, {
-            "date": "Feb",
-            "totalOrders": Mchartdata[year].febTotalOrder,
-            "income": Mchartdata[year].febIncome
-        }, {
-            "date": "Mar",
-            "totalOrders": Mchartdata[year].marTotalOrder,
-            "income": Mchartdata[year].marIncome
-        }, {
-            "date": "Apr",
-            "totalOrders": Mchartdata[year].aprTotalOrder,
-            "income": Mchartdata[year].aprIncome
-        }, {
-            "date": "May",
-            "totalOrders": Mchartdata[year].mayTotalOrder,
-            "income": Mchartdata[year].mayIncome
-        }, {
-            "date": "Jun",
-            "totalOrders": Mchartdata[year].junTotalOrder,
-            "income": Mchartdata[year].junIncome
-        }, {
-            "date": "Jul",
-            "totalOrders": Mchartdata[year].julIncome,
-            "income": Mchartdata[year].julIncome
-        }, {
-            "date": "Aug",
-            "totalOrders": Mchartdata[year].augTotalOrder,
-            "income": Mchartdata[year].augIncome
-        }, {
-            "date": "Sep",
-            "totalOrders": Mchartdata[year].sepTotalOrder,
-            "income": Mchartdata[year].sepIncome
-        }, {
-            "date": "Oct",
-            "totalOrders": Mchartdata[year].octTotalOrder,
-            "income": Mchartdata[year].octIncome
-        }, {
-            "date": "Nov",
-            "totalOrders": Mchartdata[year].novTotalOrder,
-            "income": Mchartdata[year].novIncome
-        }, {
-            "date": "Dec",
-            "totalOrders": Mchartdata[year].decTotalOrder,
-            "income": Mchartdata[year].decIncome
-        }
-        ];
-        resolve(yearBody);
-        console.log(yearBody)
-    });
+      "date": "Jan",
+      "totalOrders": Mchartdata[year].janTotalOrder,
+      "income": Mchartdata[year].janIncome
+    }, {
+      "date": "Feb",
+      "totalOrders": Mchartdata[year].febTotalOrder,
+      "income": Mchartdata[year].febIncome
+    }, {
+      "date": "Mar",
+      "totalOrders": Mchartdata[year].marTotalOrder,
+      "income": Mchartdata[year].marIncome
+    }, {
+      "date": "Apr",
+      "totalOrders": Mchartdata[year].aprTotalOrder,
+      "income": Mchartdata[year].aprIncome
+    }, {
+      "date": "May",
+      "totalOrders": Mchartdata[year].mayTotalOrder,
+      "income": Mchartdata[year].mayIncome
+    }, {
+      "date": "Jun",
+      "totalOrders": Mchartdata[year].junTotalOrder,
+      "income": Mchartdata[year].junIncome
+    }, {
+      "date": "Jul",
+      "totalOrders": Mchartdata[year].julIncome,
+      "income": Mchartdata[year].julIncome
+    }, {
+      "date": "Aug",
+      "totalOrders": Mchartdata[year].augTotalOrder,
+      "income": Mchartdata[year].augIncome
+    }, {
+      "date": "Sep",
+      "totalOrders": Mchartdata[year].sepTotalOrder,
+      "income": Mchartdata[year].sepIncome
+    }, {
+      "date": "Oct",
+      "totalOrders": Mchartdata[year].octTotalOrder,
+      "income": Mchartdata[year].octIncome
+    }, {
+      "date": "Nov",
+      "totalOrders": Mchartdata[year].novTotalOrder,
+      "income": Mchartdata[year].novIncome
+    }, {
+      "date": "Dec",
+      "totalOrders": Mchartdata[year].decTotalOrder,
+      "income": Mchartdata[year].decIncome
+    }
+    ];
+    resolve(yearBody);
+    console.log(yearBody)
+  });
 };
 
 

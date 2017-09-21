@@ -1,7 +1,7 @@
 const request = require('superagent');
 
-url = 'http://898c16d9.ngrok.io/api'
-
+url = 'http://ba96b893.ngrok.io/api'
+createToken()
 function createToken() {
     return new Promise((resolve, reject) => {
         
@@ -52,7 +52,7 @@ function retrieveTransactions() {
                     .end((err, res) => {
                         if (res.statusCode >= 200 && res.statusCode <= 299) {
                             console.log('Step 2: Transaction details retrieved successfully\n')
-                            resolve(res);
+                            resolve(res.body);
                         }
                         else if (res.statusCode == 400) {
                             console.log('Step 2: Invalid\n')
