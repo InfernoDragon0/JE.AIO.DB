@@ -81,6 +81,10 @@ app.get('/unsettled', function (req, res) {
         });
 });
 
+app.get('/blockchain', function (req, res) { 
+    res.render(path.join(__dirname + '/html/blockchain.html'));
+});
+
  app.use(function (req, res, next) {
         res.status(404).render(path.join(__dirname + '/html/error_404.html'))
 });
