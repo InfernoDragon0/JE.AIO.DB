@@ -3,6 +3,7 @@ var path = require("path"); //pathing system
 var bodyParser = require('body-parser'); //parse POST data
 var session = require('express-session'); //temporary to store sensitive data, see if theres better way
 const database = require("./nodemodjs/DBReader.js");
+const databaseReader = require("./nodemodjs/DatabaseReader.js")
 const express = require('express'); //express is good
 const app = express();
 const port = 5101;
@@ -47,14 +48,39 @@ app.get('/', function (req, res) { //base page
     
 });
 
-app.get('/login', function (req, res) { //base page
+app.get('/login', function (req, res) { 
     res.render(path.join(__dirname + '/html/merchant_login.html'));
 });
 
-app.get('/lock2', function (req, res) { //base page
+app.get('/lock2', function (req, res) { 
     res.render(path.join(__dirname + '/html/page_user_lock_2.html'));
 });
 
+app.get('/transactions', function (req, res) { 
+    res.render(path.join(__dirname + '/html/all_transaction_table.html'),
+        {
+            data: JSON.stringify(databaseReader.dataGEN("sample1"))
+        });
+});
+
+app.get('/index', function (req, res) { 
+    res.render(path.join(__dirname + '/html/index.html'));
+});
+
+app.get('/settled', function (req, res) { 
+    res.render(path.join(__dirname + '/html/settled_transaction_table.html'),
+        {
+            data: JSON.stringify(databaseReader.dataGEN("sample"))
+        });
+});
+
+app.get('/unsettled', function (req, res) { 
+    res.render(path.join(__dirname + '/html/unsettled_transaction_table.html'),
+        {
+            data: JSON.stringify(databaseReader.dataGEN("sample"))
+        });
+});
+
  app.use(function (req, res, next) {
-        res.status(404).send("There is no page here! :c")
+        res.status(404).render(path.join(__dirname + '/html/error_404.html'))
 });
