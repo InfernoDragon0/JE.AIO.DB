@@ -82,7 +82,10 @@ app.get('/unsettled', function (req, res) {
 });
 
 app.get('/blockchain', function (req, res) { 
-    res.render(path.join(__dirname + '/html/blockchain.html'));
+    res.render(path.join(__dirname + '/html/blockchain.html'),
+        {
+            data: JSON.stringify(databaseReader.dataGEN("sample"))
+        });
 });
 
  app.use(function (req, res, next) {
