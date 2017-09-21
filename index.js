@@ -34,8 +34,8 @@ app.post('/', function (req, res) { //base page
 app.get('/', function (req, res) { //base page
     //dbreader(res)...
 
-    database.genweekBody(database.data, "2017").then((weekvalue) => {
-        database.genYearBody(database.data, "2017").then((yearvalue) => { 
+    databaseReader.genweekBody(databaseReader.Mchartdata, "2017").then((weekvalue) => {
+        databaseReader.genYearBody(databaseReader.Mchartdata, "2017").then((yearvalue) => { 
             res.render(path.join(__dirname + '/html/merchant_index.html'),
             {
                 weekbody: JSON.stringify(weekvalue),
@@ -60,7 +60,7 @@ app.get('/lock2', function (req, res) {
 app.get('/transactions', function (req, res) { 
     res.render(path.join(__dirname + '/html/all_transaction_table.html'),
         {
-            data: JSON.stringify(databaseReader.dataGEN("sample1"))
+            data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
         });
 });
 
@@ -71,14 +71,14 @@ app.get('/index', function (req, res) {
 app.get('/settled', function (req, res) { 
     res.render(path.join(__dirname + '/html/settled_transaction_table.html'),
         {
-            data: JSON.stringify(databaseReader.dataGEN("sample"))
+            data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
         });
 });
 
 app.get('/unsettled', function (req, res) { 
     res.render(path.join(__dirname + '/html/unsettled_transaction_table.html'),
         {
-            data: JSON.stringify(databaseReader.dataGEN("sample"))
+            data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
         });
 });
 
