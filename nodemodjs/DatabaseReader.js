@@ -1,8 +1,10 @@
 const dbAPI = require("./databaseApiCallp2.js")
+const dbAPItest = require("./DatabaseReaderTest.js")
+// const adminFunctions = require("./admindb.js") // cause not connected
 module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
-module.exports.STdataGen=STdataGen;
-module.exports.STdata=STdata;
+module.exports.STdataGen = STdataGen;
+module.exports.STdata = STdata;
 var ATransactiondata
 var Mchartdata;
 // retrieve transaction data from DB for adminDB
@@ -15,10 +17,16 @@ var Mchartdata;
 // })
 
 // generate data for Settling Transaction table
+var STdata = {}
+var openSTdata = dbAPItest.buildSTdata()
+openSTdata.then((newBody) => {
+  STdata = {
+    "body": newBody
+  }
+  // console.log(STdata)
+})
 
-
-
-var STdata = {
+var STdata2 = {
   "body": [{
       "merchant_id": 4,
       "merchant_name": 'da pian',
@@ -40,7 +48,7 @@ var STdata = {
   ]
 }
 
-function STdataGen(input){
+function STdataGen(input) {
   return STdata
 }
 
@@ -55,13 +63,17 @@ function tester(transactionID) {
 }
 
 module.exports.tIDSpliter = tIDSpliter
-function tIDSpliter(transactionID){
-var unsplit = transactionID
-var split = unsplit.split(",")
-console.log(split)
+
+function tIDSpliter(transactionID) {
+  var unsplit = transactionID
+  var splitID = unsplit.split(",")
+  // console.log(split)
+  for (var counter = 0; counter < splitID.length - 1; counter++) {
+    console.log("IDs send to settlement : "+splitID[counter])
+    dbAPItest.InsertSettlement(splitID[counter])
+    // adminFunctions.InsertSettlement(splitID[counter]) /// UNCHECK THIS AND WE ARE DONE
+  }
 }
-
-
 
 
 
