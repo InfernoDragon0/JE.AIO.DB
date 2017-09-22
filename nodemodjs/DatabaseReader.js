@@ -6,18 +6,46 @@ var Mchartdata;
 // retrieve transaction from DB for adminDB
 var opendata = dbAPI.retrieveTransactions()
 opendata.then((value) => {
-  ATransactiondata = value
+  // ATransactiondata = value
   console.log(value.length)
   console.log(value[0].created_at)
   formatData(value, 2017)
 })
 
+
+
+
+
+module.exports.tester=tester
+function tester (transactionID){
+  // console.log("YAY :"+transactionID)
+  console.log("test :"+ transactionID)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // formate data for chart
-
 function formatData(data, year) {
-
 // checking
-
 // jan
 // feb
 // mar
@@ -711,7 +739,7 @@ function formatData(data, year) {
 
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 ///AdminDashboardData///
-var ATranssssactiondata = [{
+var ATransactiondata = [{
   "transaction_id": "fcefeeda3cf7",
   "user_id": "12345",
   "merchant_name": "AUSTRALIAN AGRICULTURAL COMPANY LIMITED",

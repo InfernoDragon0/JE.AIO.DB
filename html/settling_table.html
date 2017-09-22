@@ -15,10 +15,6 @@
     <link href="css/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
-    <!--SWEET ALERT STYLES-->
-    <!-- <link href="css/sweetalert.css" rel="stylesheet" type="text/css" /> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.min.css" rel="stylesheet" type="text/css"/>
-    <!--SWEET ALERT STYLES-->
     <link href="css/datatables.min.css" rel="stylesheet" type="text/css" />
     <link href="css/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
@@ -182,17 +178,14 @@
                         <div class="portlet box red">
                             <div class="portlet-title">
                                 <div class="caption">
-                                    <i class="fa fa-cogs"></i> Unsettled Transactions</div>
+                                    <i class="fa fa-cogs"></i> Settling Transactions</div>
                             </div>
-                            <div id="unsettledtranstable" class="portlet-body flip-scroll">
+                            <div id="settlingTable" class="portlet-body flip-scroll">
                                 <!--<div id="allT"></div>-->
-                            </div>                   
+                            </div>
                         </div>
-
                     </div>
                 </div>
-                <a href =settlingTransactions> <button class="btn btn-info mt-sweetalert" >Proceed</button> </a>
-                
             </div>
         </div>
     </div>
@@ -211,13 +204,6 @@
     <script src="scripts/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <script src="scripts/jquery.blockui.min.js" type="text/javascript"></script>
     <script src="scripts/bootstrap/bootstrap-switch/bootstrap-switch.min.js" type="text/javascript"></script>
-    <!--SWEET ALERT SCRIPTS-->
-    <!-- <script src="scripts/ui-sweetalert.min.js" type="text/javascript"></script>
-    <script src="scripts/sweetalert.min.js" type="text/javascript"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.common.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.common.min.js.map"></script>
-    <!--SWEET ALERT SCRIPTS-->
     <script src="scripts/datatable.js" type="text/javascript"></script>
     <script src="scripts/datatables.min.js" type="text/javascript"></script>
     <script src="scripts/datatables.bootstrap.js" type="text/javascript"></script>
@@ -231,9 +217,8 @@
     <script src="scripts/global/quick-sidebar.min.js" type="text/javascript"></script>
     <script src="scripts/global/quick-nav.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-    <script src="scripts/client.js" type="text/javascript"></script>
-    
-    <script src="scripts/unsettledtrans.js" type="text/babel"></script>
+    <script src="scripts/settlingTransactions.js" type="text/babel"></script>
+    <!-- <script src="scripts/unsettledtrans.js" type="text/babel"></script> -->
     <script crossorigin src="https://unpkg.com/react@15/dist/react.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
 

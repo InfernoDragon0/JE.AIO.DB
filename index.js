@@ -81,12 +81,37 @@ app.get('/unsettled', function (req, res) {
         });
 });
 
+    app.get('/settlingTransactions', function (req, res) { 
+    res.render(path.join(__dirname + '/html/settling_table.html'),
+        {
+            data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
+        });
+});
+
 app.get('/blockchain', function (req, res) { 
     res.render(path.join(__dirname + '/html/blockchain.html'),
         {
             data: JSON.stringify(blokchainReader.retrieveData())
         });
 });
+
+app.get('/settleTransactions', function (req, res) { 
+    if (!req.query.transactionid) {
+        res.send("<p>Please provide transactionid</p>");
+        return;
+    }
+    databaseReader.tester(req.query.transactionid)
+});
+
+
+app.post('/transactionidstuff', function (req, res) { 
+    if (!req.body.transactionid) {
+        res.send("<p>Please provide transactionid</p>");
+        return;
+    }
+    databaseReader.tester(req.body.transactionid)
+});
+
 
  app.use(function (req, res, next) {
         res.status(404).render(path.join(__dirname + '/html/error_404.html'))

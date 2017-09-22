@@ -1,7 +1,7 @@
 const request = require('superagent');
 
-url = 'http://ba96b893.ngrok.io/api'
-createToken()
+url = 'http://7a911041.ngrok.io/api'
+// createToken()
 function createToken() {
     return new Promise((resolve, reject) => {
         

@@ -1,5 +1,5 @@
 renderData()
-
+const databaseFunctions = require("../../nodemodjs/DatabaseReader.js")
 function renderData() {
 
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
@@ -18,10 +18,10 @@ function renderData() {
     }
     console.log(filteredData)
     const UnsettledTrow = () => (
-        <tbody>
+        <tbody id="selectable">
             {filteredData.map((data, i) => (
                 <tr key={i}>
-                    <td>{data.transaction_id}</td>
+                    <td className="transactionid">{data.transaction_id}</td>
                     <td>{data.fk_user_id}</td>
                     <td>{data.fk_merchant_id}</td>
                     <td>{data.fk_branch_id}</td>
@@ -59,7 +59,71 @@ function renderData() {
                 <UnsettledTrow />
             </table>
         </div>,
-        document.getElementById("unsettledtranstable")
+        document.getElementById("unsettledtranstable"),
+        () => {
+            console.log("rendererd");
+            $("#selectable").selectable({
+                filter: 'tr',
+                stop: function () {
+                    var result = ""
+                    var result2 = ""
+                    $(".ui-selected", this).each(function () {
+                        var index = $(this).find(".transactionid").text();
+                        result += ("Row " + index + ",\n" );
+                        result2 += (index + " " );
+                    })
+                    swal({
+                        title: " You have selected: ",
+                        text: result ,
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Proceed!', // add functions here
+                        cancelButtonText: 'No, Cancel!',
+                        confirmButtonClass: 'btn btn-success',
+                        cancelButtonClass: 'btn btn-danger',
+                        buttonsStyling: true
+                    }).then(function () {
+                        sendSelected(result2);
+                        swal(
+                            'Success!',
+                            '',
+                            'success'
+                        )
+                        
+                    }, function (dismiss) {
+                        // dismiss can be 'cancel', 'overlay',
+                        // 'close', and 'timer'
+                        if (dismiss === 'cancel') {
+                            swal(
+                                'Cancelled',
+                                '',
+                                'error'
+                            )
+                        }
+                    })
+                }
+            });
+        }
+        // () => {
+        //     console.log("rendererd");
+        //     $("#selectable").selectable({
+        //         filter: 'tr',
+        //         stop: function () {
+        //             var result = ""
+        //             $(".ui-selected", this).each(function () {
+        //                 var index = $(this).find(".transactionid").text();
+        //                 result += (index + ",");     
+        //             })
+        //             alert("Selected " + result)
+        //             sendSelected(result);
+        //            // databaseFunctions.tester(index);
+                    
+        //         }
+        //     });
+        // }
     )
+    
     TableDatatablesButtons.init();
 }
