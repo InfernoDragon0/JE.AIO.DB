@@ -59,53 +59,8 @@ function renderData() {
                 <UnsettledTrow />
             </table>
         </div>,
-        document.getElementById("unsettledtranstable"),
-        () => {
-            console.log("rendererd");
-            $("#selectable").selectable({
-                filter: 'tr',
-                stop: function () {
-                    var result = ""
-                    var result2 = ""
-                    $(".ui-selected", this).each(function () {
-                        var index = $(this).find(".transactionid").text();
-                        result += ("Row " + index + ",\n" );
-                        result2 += (index + " " );
-                    })
-                    swal({
-                        title: " You have selected: ",
-                        text: result ,
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, Proceed!', // add functions here
-                        cancelButtonText: 'No, Cancel!',
-                        confirmButtonClass: 'btn btn-success',
-                        cancelButtonClass: 'btn btn-danger',
-                        buttonsStyling: true
-                    }).then(function () {
-                        sendSelected(result2);
-                        swal(
-                            'Success!',
-                            '',
-                            'success'
-                        )
-                        
-                    }, function (dismiss) {
-                        // dismiss can be 'cancel', 'overlay',
-                        // 'close', and 'timer'
-                        if (dismiss === 'cancel') {
-                            swal(
-                                'Cancelled',
-                                '',
-                                'error'
-                            )
-                        }
-                    })
-                }
-            });
-        }
+        document.getElementById("unsettledtranstable")
+        
         // () => {
         //     console.log("rendererd");
         //     $("#selectable").selectable({
