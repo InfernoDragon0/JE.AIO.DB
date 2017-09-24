@@ -505,7 +505,7 @@ function letsMergept1(merchant_idd) {
             var amount = 0
             var newArray = []
             for (var counter = 0; counter < transaction_result.body.length; counter++) {
-                console.log (transaction_result.body[counter].is_transaction_complete)
+                // console.log (transaction_result.body[counter].is_transaction_complete)
                 if(transaction_result.body[counter].is_transaction_complete == false ){
                 if (transaction_result.body[counter].fk_merchant_id == merchant_idd) {
                     body.merchant_id = merchant_idd
@@ -524,7 +524,7 @@ function letsMergept1(merchant_idd) {
             body.settlement_amount = amount
             // console.log('total Amount :'+amount)
             // console.log(body)
-            console.log(newArray)
+            // console.log(newArray)
             resolve(body)
             // resolve("1")
         })

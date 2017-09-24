@@ -373,7 +373,7 @@ function confirmTransaction(transaction_id) {
                     .set('Content-Type', 'application/json')
                     .set('Accept', 'application/json')
                     .set('Authorization', 'Bearer ' + value)
-                    .send({ "transaction_id": transaction_id }) // "settlement_id" : `${settlement_id}`
+                    .send({ "transaction_id": transaction_id }) // for settlement
                     .end((err, res) => {
                         if (res.statusCode >= 200 && res.statusCode <= 299) {
                             console.log('Confirm Transaction: Updated transaction\n')
