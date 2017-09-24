@@ -1,5 +1,5 @@
 const dbAPI = require("./databaseApiCallp2.js")
-const dbAPItest = require("./DatabaseReaderTest.js")
+const dbAPItest = require("./databaseReaderTest.js")
 // const adminFunctions = require("./admindb.js") // cause not connected
 module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
