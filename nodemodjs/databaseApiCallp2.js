@@ -238,8 +238,14 @@ function retrieveSettlements() {
 //   "fk_transaction_id": 0,
 //   "settlement_amount": 0
 
+// var transactionList = []
+// transactionList.push('hi')
+// transactionList.push('hellow')
+// transactionList.push('helo')
+// transactionList.push('halo')
 
-// /*TEST:*/ createSettlement(2, 2, "afsdfjsfjfofjsd", 28.75); 
+
+// /*TEST:*/ createSettlement(22, 231, transactionList.toString(), 28.75); 
 
 module.exports.createSettlement = createSettlement;
 
@@ -255,7 +261,7 @@ function createSettlement(fk_merchant_id, fk_branch_id, fk_transaction_id, settl
                     .send({
                         "fk_merchant_id": fk_merchant_id, // integer
                         "fk_branch_id": fk_branch_id, // integer
-                        "fk_transaction_id": fk_transaction_id, // integer
+                        "fk_transaction_id": fk_transaction_id, // string [iii,iii,iii]
                         "settlement_amount": settlement_amount // integer
                     })
                     .end((err, res) => {

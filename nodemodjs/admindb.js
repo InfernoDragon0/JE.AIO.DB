@@ -290,7 +290,7 @@ function FullRefund(transactionId) {
 
         promiseRetrieveIdTransaction.then((value) => {
             if (value.statusCode >= 200 && value.statusCode <= 299) {
-                if (value.body.transaction_type == 1 && value.body.is_transaction_completed == false) {
+                if (value.body.transaction_type == 1 && value.body.is_transaction_complete == false) {
 
                     var brainId = value.body.braintree_transaction_id;
                     var userId = value.body.fk_user_id;
