@@ -105,7 +105,7 @@ function renderData() {
                         inputValidator: function (value) {
                             return new Promise(function (resolve, reject) {
                                 if (value === 'Confirm') {
-                                    FullRefund(result2)
+                                    // FullRefund(result2)
                                     resolve()
                                 } else {
                                     reject('Please type in the word "Confirm" in order to proceed!')
