@@ -47,45 +47,36 @@ function renderData() {
                     var merchantName = ""
                     $(".ui-selected", this).each(function () {
                         var index = $(this).find(".transactionid").text();
-                        var merchantID2= $(this).find(".merchantid").text();
-                        var amount2= $(this).find(".settlement_amount").text();
-                        var merchantName2= $(this).find(".merchant_name").text();
-                        result += ("Row " + index + ",\n" );
-                        result2 += (index + " " );
-                        merchantid= merchantID2
+                        var merchantID2 = $(this).find(".merchantid").text();
+                        var amount2 = $(this).find(".settlement_amount").text();
+                        var merchantName2 = $(this).find(".merchant_name").text();
+                        merchantid = merchantID2
                         amount = amount2
                         merchantName = merchantName2
+                        result += ("\n" + "Amount Payable: " + amount + "\n" + "Transaction IDs: " + index + "\n" + "//");
                     })
                     swal({
-                        title: " Merchant Name :"+merchantName,
-                        text: "Amount Payable :"+amount +"\r\n"+"Transaction IDs :"+result2 ,
+                        title: 'Merchant Name: ' + merchantName,
+                        text: result,
                         type: 'warning',
+                        input: 'text',
+                        inputPlaceholder: 'Confirm',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, Proceed!', // add functions here
-                        cancelButtonText: 'No, Cancel!',
-                        confirmButtonClass: 'btn btn-success',
-                        cancelButtonClass: 'btn btn-danger',
-                        buttonsStyling: true
-                    }).then(function () {
-                        sendSelected(result2);
-                        swal(
-                            'Success!',
-                            '',
-                            'success'
-                        )
-                        
-                    }, function (dismiss) {
-                        // dismiss can be 'cancel', 'overlay',
-                        // 'close', and 'timer'
-                        if (dismiss === 'cancel') {
-                            swal(
-                                'Cancelled',
-                                '',
-                                'error'
-                            )
+                        allowOutsideClick: false,
+                        inputValidator: function (value) {
+                            return new Promise(function (resolve, reject) {
+                                if (value === 'Confirm') {
+                                    resolve()
+                                } else {
+                                    reject('Please type in the word "Confirm" in order to proceed!')
+                                }
+                            })
                         }
+                    }).then(function (name) {
+                        swal({
+                            type: 'success',
+                            title: 'Confirmed!'
+                        })
                     })
                 }
             });

@@ -5,16 +5,48 @@ module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
 module.exports.STdataGen = STdataGen;
 module.exports.STdata = STdata;
-var ATransactiondata
+var ATransactiondata;
 var Mchartdata;
 // retrieve transaction data from DB for adminDB
-// var opendata = dbAPI.retrieveTransactions()
-// opendata.then((value) => {
-//   // ATransactiondata = value
-//   console.log(value.length)
-//   console.log(value[0].created_at)
-//   formatData(value, 2017)
-// })
+var opendata = dbAPI.retrieveTransactions()
+opendata.then((value) => {
+  ATransactiondata = value.body
+  console.log("yoyo")
+for (var i = 0; i< value.body.length; i ++){
+
+        value.body[i].datetime = getDateTime(value.body[i].created_at)
+}
+
+  console.log(ATransactiondata)
+  // console.log(value.created_at)
+  // formatData(value, 2017)
+})
+
+function getDateTime(date) {
+    
+        var a = new Date(date);
+
+        var hour = a.getHours();
+        hour = (hour < 10 ? "0" : "") + hour;
+    
+        var min  =a.getMinutes();
+        min = (min < 10 ? "0" : "") + min;
+    
+        var sec  = a.getSeconds();
+        sec = (sec < 10 ? "0" : "") + sec;
+    
+        var year = a.getFullYear();
+    
+        var month = a.getMonth() + 1;
+        month = (month < 10 ? "0" : "") + month;
+    
+        var day  = a.getDate();
+        day = (day < 10 ? "0" : "") + day;
+    
+        // console.log( day + "/" + month + "/" + year)
+        // console.log( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+        return ( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+    }
 
 // generate data for Settling Transaction table
 var STdata = {}
@@ -762,7 +794,7 @@ function formatData(data, year) {
 
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 ///AdminDashboardData///
-var ATransactiondata = [{
+var ATransactiondata2 = [{
     "transaction_id": "fcefeeda3cf7",
     "user_id": "12345",
     "merchant_name": "AUSTRALIAN AGRICULTURAL COMPANY LIMITED",

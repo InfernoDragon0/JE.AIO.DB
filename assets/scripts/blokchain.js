@@ -1,8 +1,13 @@
 renderData()
 
 function renderData() {
-
-    var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
+    // console.log("yayy"+alldata.replace(/&#34;/g, '"'))
+    var newJson = alldata.replace(/&#34;/g, '"')
+    // var newJson2 =newJson.replace(/\$/g, '')
+    var result = newJson.substring(1, newJson.length-1);
+    console.log(result)
+    
+    var datajson = JSON.parse(result)
     console.log("datajson is" + JSON.stringify(datajson))
 
     const DashboardRow = () => (
@@ -11,11 +16,11 @@ function renderData() {
                 <tr key={i}>
                     <td className="transactionid">{data.transactionId}</td>
                     <td>{data.timestamp}</td>
-                    <td>{data.amount ? data.amount : data.resources[0].value}</td>
-                    <td>{data.asset ? data.asset : data.resources[0].clientWalletID ? data.resources[0].clientWalletID : "--"}</td>
-                    <td>{data.asset2 ? data.asset2 : data.resources[0].merchantWalletID ? data.resources[0].merchantWalletID : "--"}</td>
+                    <td>{data.amount ? data.amount : data.amount ? data.asset : "--"}</td>
+                    <td>{data.asset ? data.asset : data.asset ? data.asset : "--"}</td>
+                    <td>{data.asset2 ? data.asset2 : data.asset2 ? data.asset2 : "--"}</td>
                     <td>{data.$class}</td>
-                    <td>{data.resources ? data.resources[0].$class : "--"}</td>
+                    {/* <td>{data.resources ? data.$class : "--"}</td> */}
                 </tr>
             ))}
         </tbody>
@@ -32,7 +37,7 @@ function renderData() {
                         <th><i className="fa fa-user"></i> Client ID </th>
                         <th><i className="fa fa-user"></i> Merchant ID </th>
                         <th><i className="fa fa-times"></i> Transaction Type </th>
-                        <th><i className="fa fa-info"></i> Transaction Class </th>
+                        {/* <th><i className="fa fa-info"></i> Transaction Class </th> */}
                     </tr>
                 </thead>
                 <DashboardRow />

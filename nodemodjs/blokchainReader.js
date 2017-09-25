@@ -1,6 +1,26 @@
+var hyperwallet = require('./hyperwallet.js')
 module.exports.retrieveData = retrieveData
 
-var data = [
+var data 
+openPromise = hyperwallet.retrieveTransaction()
+openPromise.then((dataRetrieved)=>{
+    data=dataRetrieved
+    console.log(data)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+ data2 = [
     {
         "$class": "org.acme.jenetwork.walletTransactionPay",
         "asset": "resource:org.acme.jenetwork.clientWallet#clientWalletID:12345",
