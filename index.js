@@ -75,7 +75,13 @@ app.get('/settled', function (req, res) {
 
 app.get('/unsettled', function (req, res) {
     res.render(path.join(__dirname + '/html/unsettled_transaction_table.html'), {
-        data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
+        data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
+    });
+});
+
+app.get('/tforRefund', function (req, res) {
+    res.render(path.join(__dirname + '/html/transaction_for_refund.html'), {
+        data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
     });
 });
 

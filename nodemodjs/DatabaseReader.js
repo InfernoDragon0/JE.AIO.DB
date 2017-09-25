@@ -5,6 +5,7 @@ module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
 module.exports.STdataGen = STdataGen;
 module.exports.STdata = STdata;
+module.exports.BeforeRefundGEN = BeforeRefundGEN;
 var ATransactiondata;
 var Mchartdata;
 // retrieve transaction data from DB for adminDB
@@ -12,10 +13,10 @@ var opendata = dbAPI.retrieveTransactions()
 opendata.then((value) => {
   ATransactiondata = value.body
   console.log("yoyo")
-for (var i = 0; i< value.body.length; i ++){
+  for (var i = 0; i < value.body.length; i++) {
 
-        value.body[i].datetime = getDateTime(value.body[i].created_at)
-}
+    value.body[i].datetime = getDateTime(value.body[i].created_at)
+  }
 
   console.log(ATransactiondata)
   // console.log(value.created_at)
@@ -23,30 +24,37 @@ for (var i = 0; i< value.body.length; i ++){
 })
 
 function getDateTime(date) {
-    
-        var a = new Date(date);
 
-        var hour = a.getHours();
-        hour = (hour < 10 ? "0" : "") + hour;
-    
-        var min  =a.getMinutes();
-        min = (min < 10 ? "0" : "") + min;
-    
-        var sec  = a.getSeconds();
-        sec = (sec < 10 ? "0" : "") + sec;
-    
-        var year = a.getFullYear();
-    
-        var month = a.getMonth() + 1;
-        month = (month < 10 ? "0" : "") + month;
-    
-        var day  = a.getDate();
-        day = (day < 10 ? "0" : "") + day;
-    
-        // console.log( day + "/" + month + "/" + year)
-        // console.log( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
-        return ( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
-    }
+  var a = new Date(date);
+
+  var hour = a.getHours();
+  hour = (hour < 10 ? "0" : "") + hour;
+
+  var min = a.getMinutes();
+  min = (min < 10 ? "0" : "") + min;
+
+  var sec = a.getSeconds();
+  sec = (sec < 10 ? "0" : "") + sec;
+
+  var year = a.getFullYear();
+
+  var month = a.getMonth() + 1;
+  month = (month < 10 ? "0" : "") + month;
+
+  var day = a.getDate();
+  day = (day < 10 ? "0" : "") + day;
+
+  // console.log( day + "/" + month + "/" + year)
+  // console.log( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+  return (day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+}
+
+var BeforeRefund;
+
+var promiseRetrieveTransactionForRefund = dbAPItest.RetrieveTransactionForRefund();
+promiseRetrieveTransactionForRefund.then((value) => {
+  BeforeRefund = value;
+})
 
 // generate data for Settling Transaction table
 var STdata = {}
@@ -60,23 +68,23 @@ openSTdata.then((newBody) => {
 
 var STdata2 = {
   "body": [{
-      "merchant_id": 4,
-      "merchant_name": 'da pian',
-      "settlement_amount": 223,
-      "transaction_ids": [5, 3]
-    },
-    {
-      "merchant_id": 5,
-      "merchant_name": 'da pian',
-      "settlement_amount": 421,
-      "transaction_ids": [6, 2]
-    },
-    {
-      "merchant_id": 3,
-      "merchant_name": 'da pian',
-      "settlement_amount": -100,
-      "transaction_ids": [1]
-    }
+    "merchant_id": 4,
+    "merchant_name": 'da pian',
+    "settlement_amount": 223,
+    "transaction_ids": [5, 3]
+  },
+  {
+    "merchant_id": 5,
+    "merchant_name": 'da pian',
+    "settlement_amount": 421,
+    "transaction_ids": [6, 2]
+  },
+  {
+    "merchant_id": 3,
+    "merchant_name": 'da pian',
+    "settlement_amount": -100,
+    "transaction_ids": [1]
+  }
   ]
 }
 
@@ -101,7 +109,7 @@ function tIDSpliter(transactionID) {
   var splitID = unsplit.split(",")
   // console.log(split)
   for (var counter = 0; counter < splitID.length - 1; counter++) {
-    console.log("IDs send to settlement : "+splitID[counter])
+    console.log("IDs send to settlement : " + splitID[counter])
     dbAPItest.InsertSettlement(splitID[counter])
     // adminFunctions.InsertSettlement(splitID[counter]) /// UNCHECK THIS AND WE ARE DONE
   }
@@ -795,127 +803,131 @@ function formatData(data, year) {
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 ///AdminDashboardData///
 var ATransactiondata2 = [{
-    "transaction_id": "fcefeeda3cf7",
-    "user_id": "12345",
-    "merchant_name": "AUSTRALIAN AGRICULTURAL COMPANY LIMITED",
-    "branch_id": "AAC",
-    "created_at": "2017-08-31T06:39:49.225Z",
-    "transaction_amount": "$" + 2572,
-    "transaction_type": 1
-  },
-  {
-    "transaction_id": "625799b05479",
-    "user_id": "112233",
-    "merchant_name": "ARDENT LEISURE GROUP",
-    "branch_id": "AAD",
-    "created_at": "2017-08-31T06:35:41.696Z",
-    "transaction_amount": "$" + 2183,
-    "transaction_type": 4
-  },
-  {
-    "transaction_id": "c4fd43e6f8c0",
-    "user_id": "223344",
-    "merchant_name": "AUSENCO LIMITED",
-    "branch_id": "AAX",
-    "created_at": "2017-08-31T06:46:57.839Z",
-    "transaction_amount": "$" + 35113,
-    "transaction_type": 0
-  },
-  {
-    "transaction_id": "e42b0077402b",
-    "user_id": "332211",
-    "merchant_name": "ABACUS PROPERTY GROUP",
-    "branch_id": "ABP",
-    "created_at": "2017-08-31T07:15:05.699Z",
-    "transaction_amount": "$" + 6352,
-    "transaction_type": 5
-  },
-  {
-    "transaction_id": "21579c676e58",
-    "user_id": "778899",
-    "merchant_name": "ADELAIDE BRIGHTON LIMITED",
-    "branch_id": "ABC",
-    "created_at": "2017-08-31T06:26:44.036Z",
-    "transaction_amount": "$" + 214,
-    "transaction_type": 2
-  },
-  {
-    "transaction_id": "aef1579c676e",
-    "user_id": "738201",
-    "merchant_name": "EUMENTHOL BAY LIMITED",
-    "branch_id": "EBL",
-    "created_at": "2017-08-31T07:15:27.036Z",
-    "transaction_amount": "$" + 6322,
-    "transaction_type": 6
-  },
-  {
-    "transaction_id": "aef157eb0031",
-    "user_id": "738201",
-    "merchant_name": "SUNBAY LAGOON",
-    "branch_id": "SBL",
-    "created_at": "2017-08-30T08:24:31.234Z",
-    "transaction_amount": "$" + 6322,
-    "transaction_type": 6
-  },
-  {
-    "transaction_id": "95a8eef3a97c",
-    "user_id": "098765",
-    "merchant_name": "IRON LIMITED",
-    "branch_id": "ILT",
-    "created_at": "2017-08-30T06:45:23.619Z",
-    "transaction_amount": "$" + 9872,
-    "transaction_type": 3
-  },
-  {
-    "transaction_id": "a91eb26228c4",
-    "user_id": "567890",
-    "merchant_name": "ENERGY LIMITED",
-    "branch_id": "ELT",
-    "created_at": "2017-08-29T06:25:45.419Z",
-    "transaction_amount": "$" + 12358,
-    "transaction_type": 6
-  },
-  {
-    "transaction_id": "a91eb003167",
-    "user_id": "129067",
-    "merchant_name": "LONGISLAND LIMITED",
-    "branch_id": "LIL",
-    "created_at": "2017-08-29T06:45:50.429Z",
-    "transaction_amount": "$" + 7394,
-    "transaction_type": 4
-  },
-  {
-    "transaction_id": "a995a8ee3167",
-    "user_id": "736485",
-    "merchant_name": "LOCKSMITH LIMITED",
-    "branch_id": "LSL",
-    "created_at": "2017-08-26T06:29:50.419Z",
-    "transaction_amount": "$" + 2345,
-    "transaction_type": 5
-  },
-  {
-    "transaction_id": "a9cefee3167",
-    "user_id": "096785",
-    "merchant_name": "HUDSON PRIVATE LIMITED",
-    "branch_id": "HPL",
-    "created_at": "2017-08-31T07:29:29.619Z",
-    "transaction_amount": "$" + 2345,
-    "transaction_type": 1
-  },
-  {
-    "transaction_id": "597e86003167",
-    "user_id": "345678",
-    "merchant_name": "RESOURCES LIMITED",
-    "branch_id": "RLT",
-    "created_at": "2017-08-26T06:26:29.714Z",
-    "transaction_amount": "$" + 4817,
-    "transaction_type": 1
-  }
+  "transaction_id": "fcefeeda3cf7",
+  "user_id": "12345",
+  "merchant_name": "AUSTRALIAN AGRICULTURAL COMPANY LIMITED",
+  "branch_id": "AAC",
+  "created_at": "2017-08-31T06:39:49.225Z",
+  "transaction_amount": "$" + 2572,
+  "transaction_type": 1
+},
+{
+  "transaction_id": "625799b05479",
+  "user_id": "112233",
+  "merchant_name": "ARDENT LEISURE GROUP",
+  "branch_id": "AAD",
+  "created_at": "2017-08-31T06:35:41.696Z",
+  "transaction_amount": "$" + 2183,
+  "transaction_type": 4
+},
+{
+  "transaction_id": "c4fd43e6f8c0",
+  "user_id": "223344",
+  "merchant_name": "AUSENCO LIMITED",
+  "branch_id": "AAX",
+  "created_at": "2017-08-31T06:46:57.839Z",
+  "transaction_amount": "$" + 35113,
+  "transaction_type": 0
+},
+{
+  "transaction_id": "e42b0077402b",
+  "user_id": "332211",
+  "merchant_name": "ABACUS PROPERTY GROUP",
+  "branch_id": "ABP",
+  "created_at": "2017-08-31T07:15:05.699Z",
+  "transaction_amount": "$" + 6352,
+  "transaction_type": 5
+},
+{
+  "transaction_id": "21579c676e58",
+  "user_id": "778899",
+  "merchant_name": "ADELAIDE BRIGHTON LIMITED",
+  "branch_id": "ABC",
+  "created_at": "2017-08-31T06:26:44.036Z",
+  "transaction_amount": "$" + 214,
+  "transaction_type": 2
+},
+{
+  "transaction_id": "aef1579c676e",
+  "user_id": "738201",
+  "merchant_name": "EUMENTHOL BAY LIMITED",
+  "branch_id": "EBL",
+  "created_at": "2017-08-31T07:15:27.036Z",
+  "transaction_amount": "$" + 6322,
+  "transaction_type": 6
+},
+{
+  "transaction_id": "aef157eb0031",
+  "user_id": "738201",
+  "merchant_name": "SUNBAY LAGOON",
+  "branch_id": "SBL",
+  "created_at": "2017-08-30T08:24:31.234Z",
+  "transaction_amount": "$" + 6322,
+  "transaction_type": 6
+},
+{
+  "transaction_id": "95a8eef3a97c",
+  "user_id": "098765",
+  "merchant_name": "IRON LIMITED",
+  "branch_id": "ILT",
+  "created_at": "2017-08-30T06:45:23.619Z",
+  "transaction_amount": "$" + 9872,
+  "transaction_type": 3
+},
+{
+  "transaction_id": "a91eb26228c4",
+  "user_id": "567890",
+  "merchant_name": "ENERGY LIMITED",
+  "branch_id": "ELT",
+  "created_at": "2017-08-29T06:25:45.419Z",
+  "transaction_amount": "$" + 12358,
+  "transaction_type": 6
+},
+{
+  "transaction_id": "a91eb003167",
+  "user_id": "129067",
+  "merchant_name": "LONGISLAND LIMITED",
+  "branch_id": "LIL",
+  "created_at": "2017-08-29T06:45:50.429Z",
+  "transaction_amount": "$" + 7394,
+  "transaction_type": 4
+},
+{
+  "transaction_id": "a995a8ee3167",
+  "user_id": "736485",
+  "merchant_name": "LOCKSMITH LIMITED",
+  "branch_id": "LSL",
+  "created_at": "2017-08-26T06:29:50.419Z",
+  "transaction_amount": "$" + 2345,
+  "transaction_type": 5
+},
+{
+  "transaction_id": "a9cefee3167",
+  "user_id": "096785",
+  "merchant_name": "HUDSON PRIVATE LIMITED",
+  "branch_id": "HPL",
+  "created_at": "2017-08-31T07:29:29.619Z",
+  "transaction_amount": "$" + 2345,
+  "transaction_type": 1
+},
+{
+  "transaction_id": "597e86003167",
+  "user_id": "345678",
+  "merchant_name": "RESOURCES LIMITED",
+  "branch_id": "RLT",
+  "created_at": "2017-08-26T06:26:29.714Z",
+  "transaction_amount": "$" + 4817,
+  "transaction_type": 1
+}
 ];
 
 function ATransactiondataGEN(input) {
   return ATransactiondata
 };
+
+function BeforeRefundGEN(input) {
+  return BeforeRefund
+}
 
 function dataGENdb(input) {
   return new Promise(); //for db
@@ -1091,303 +1103,303 @@ function genweekBody(datax) { //datax change to data for production
     var weekBody = {
       'jan': [{
 
-          "date": "Jan Week 1",
-          "totalOrders": Mchartdata[year]['jan'].week1Orders,
-          "income": Mchartdata[year]['jan'].week1income
-        },
-        {
+        "date": "Jan Week 1",
+        "totalOrders": Mchartdata[year]['jan'].week1Orders,
+        "income": Mchartdata[year]['jan'].week1income
+      },
+      {
 
-          "date": "Jan Week 2",
-          "totalOrders": Mchartdata[year]['jan'].week2Orders,
-          "income": Mchartdata[year]['jan'].week2income
-        },
-        {
+        "date": "Jan Week 2",
+        "totalOrders": Mchartdata[year]['jan'].week2Orders,
+        "income": Mchartdata[year]['jan'].week2income
+      },
+      {
 
-          "date": "Jan Week 3",
-          "totalOrders": Mchartdata[year]['jan'].week3Orders,
-          "income": Mchartdata[year]['jan'].week3income
-        },
-        {
+        "date": "Jan Week 3",
+        "totalOrders": Mchartdata[year]['jan'].week3Orders,
+        "income": Mchartdata[year]['jan'].week3income
+      },
+      {
 
-          "date": "Jan Week 4",
-          "totalOrders": Mchartdata[year]['jan'].week4Orders,
-          "income": Mchartdata[year]['jan'].week4income
-        }
+        "date": "Jan Week 4",
+        "totalOrders": Mchartdata[year]['jan'].week4Orders,
+        "income": Mchartdata[year]['jan'].week4income
+      }
       ],
       'feb': [{
 
-          "date": "Feb Week 1",
-          "totalOrders": Mchartdata[year]['feb'].week1Orders,
-          "income": Mchartdata[year]['feb'].week1income
-        },
-        {
+        "date": "Feb Week 1",
+        "totalOrders": Mchartdata[year]['feb'].week1Orders,
+        "income": Mchartdata[year]['feb'].week1income
+      },
+      {
 
-          "date": "Feb Week 2",
-          "totalOrders": Mchartdata[year]['feb'].week2Orders,
-          "income": Mchartdata[year]['feb'].week2income
-        },
-        {
+        "date": "Feb Week 2",
+        "totalOrders": Mchartdata[year]['feb'].week2Orders,
+        "income": Mchartdata[year]['feb'].week2income
+      },
+      {
 
-          "date": "Feb Week 3",
-          "totalOrders": Mchartdata[year]['feb'].week3Orders,
-          "income": Mchartdata[year]['feb'].week3income
-        },
-        {
+        "date": "Feb Week 3",
+        "totalOrders": Mchartdata[year]['feb'].week3Orders,
+        "income": Mchartdata[year]['feb'].week3income
+      },
+      {
 
-          "date": "Feb Week 4",
-          "totalOrders": Mchartdata[year]['feb'].week4Orders,
-          "income": Mchartdata[year]['feb'].week4income
-        }
+        "date": "Feb Week 4",
+        "totalOrders": Mchartdata[year]['feb'].week4Orders,
+        "income": Mchartdata[year]['feb'].week4income
+      }
       ],
       'mar': [{
 
-          "date": "Mar Week 1",
-          "totalOrders": Mchartdata[year]['mar'].week1Orders,
-          "income": Mchartdata[year]['mar'].week1income
-        },
-        {
+        "date": "Mar Week 1",
+        "totalOrders": Mchartdata[year]['mar'].week1Orders,
+        "income": Mchartdata[year]['mar'].week1income
+      },
+      {
 
-          "date": "Mar Week 2",
-          "totalOrders": Mchartdata[year]['mar'].week2Orders,
-          "income": Mchartdata[year]['mar'].week2income
-        },
-        {
+        "date": "Mar Week 2",
+        "totalOrders": Mchartdata[year]['mar'].week2Orders,
+        "income": Mchartdata[year]['mar'].week2income
+      },
+      {
 
-          "date": "Mar Week 3",
-          "totalOrders": Mchartdata[year]['mar'].week3Orders,
-          "income": Mchartdata[year]['mar'].week3income
-        },
-        {
+        "date": "Mar Week 3",
+        "totalOrders": Mchartdata[year]['mar'].week3Orders,
+        "income": Mchartdata[year]['mar'].week3income
+      },
+      {
 
-          "date": "Mar Week 4",
-          "totalOrders": Mchartdata[year]['mar'].week4Orders,
-          "income": Mchartdata[year]['mar'].week4income
-        }
+        "date": "Mar Week 4",
+        "totalOrders": Mchartdata[year]['mar'].week4Orders,
+        "income": Mchartdata[year]['mar'].week4income
+      }
       ],
       'apr': [{
 
-          "date": "Apr Week 1",
-          "totalOrders": Mchartdata[year]['apr'].week1Orders,
-          "income": Mchartdata[year]['apr'].week1income
-        },
-        {
+        "date": "Apr Week 1",
+        "totalOrders": Mchartdata[year]['apr'].week1Orders,
+        "income": Mchartdata[year]['apr'].week1income
+      },
+      {
 
-          "date": "Apr Week 2",
-          "totalOrders": Mchartdata[year]['apr'].week2Orders,
-          "income": Mchartdata[year]['apr'].week2income
-        },
-        {
+        "date": "Apr Week 2",
+        "totalOrders": Mchartdata[year]['apr'].week2Orders,
+        "income": Mchartdata[year]['apr'].week2income
+      },
+      {
 
-          "date": "Apr Week 3",
-          "totalOrders": Mchartdata[year]['apr'].week3Orders,
-          "income": Mchartdata[year]['apr'].week3income
-        },
-        {
+        "date": "Apr Week 3",
+        "totalOrders": Mchartdata[year]['apr'].week3Orders,
+        "income": Mchartdata[year]['apr'].week3income
+      },
+      {
 
-          "date": "Apr Week 4",
-          "totalOrders": Mchartdata[year]['apr'].week4Orders,
-          "income": Mchartdata[year]['apr'].week4income
-        }
+        "date": "Apr Week 4",
+        "totalOrders": Mchartdata[year]['apr'].week4Orders,
+        "income": Mchartdata[year]['apr'].week4income
+      }
       ],
       'may': [{
 
-          "date": "May Week 1",
-          "totalOrders": Mchartdata[year]['may'].week1Orders,
-          "income": Mchartdata[year]['may'].week1income
-        },
-        {
+        "date": "May Week 1",
+        "totalOrders": Mchartdata[year]['may'].week1Orders,
+        "income": Mchartdata[year]['may'].week1income
+      },
+      {
 
-          "date": "May Week 2",
-          "totalOrders": Mchartdata[year]['may'].week2Orders,
-          "income": Mchartdata[year]['may'].week2income
-        },
-        {
+        "date": "May Week 2",
+        "totalOrders": Mchartdata[year]['may'].week2Orders,
+        "income": Mchartdata[year]['may'].week2income
+      },
+      {
 
-          "date": "May Week 3",
-          "totalOrders": Mchartdata[year]['may'].week3Orders,
-          "income": Mchartdata[year]['may'].week3income
-        },
-        {
+        "date": "May Week 3",
+        "totalOrders": Mchartdata[year]['may'].week3Orders,
+        "income": Mchartdata[year]['may'].week3income
+      },
+      {
 
-          "date": "May Week 4",
-          "totalOrders": Mchartdata[year]['may'].week4Orders,
-          "income": Mchartdata[year]['may'].week4income
-        }
+        "date": "May Week 4",
+        "totalOrders": Mchartdata[year]['may'].week4Orders,
+        "income": Mchartdata[year]['may'].week4income
+      }
       ],
       'jun': [{
 
-          "date": "Jun Week 1",
-          "totalOrders": Mchartdata[year]['jun'].week1Orders,
-          "income": Mchartdata[year]['jun'].week1income
-        },
-        {
+        "date": "Jun Week 1",
+        "totalOrders": Mchartdata[year]['jun'].week1Orders,
+        "income": Mchartdata[year]['jun'].week1income
+      },
+      {
 
-          "date": "Jun Week 2",
-          "totalOrders": Mchartdata[year]['jun'].week2Orders,
-          "income": Mchartdata[year]['jun'].week2income
-        },
-        {
+        "date": "Jun Week 2",
+        "totalOrders": Mchartdata[year]['jun'].week2Orders,
+        "income": Mchartdata[year]['jun'].week2income
+      },
+      {
 
-          "date": "Jun Week 3",
-          "totalOrders": Mchartdata[year]['jun'].week3Orders,
-          "income": Mchartdata[year]['jun'].week3income
-        },
-        {
+        "date": "Jun Week 3",
+        "totalOrders": Mchartdata[year]['jun'].week3Orders,
+        "income": Mchartdata[year]['jun'].week3income
+      },
+      {
 
-          "date": "Jun Week 4",
-          "totalOrders": Mchartdata[year]['jun'].week4Orders,
-          "income": Mchartdata[year]['jun'].week4income
-        }
+        "date": "Jun Week 4",
+        "totalOrders": Mchartdata[year]['jun'].week4Orders,
+        "income": Mchartdata[year]['jun'].week4income
+      }
       ],
       'jul': [{
 
-          "date": "Jul Week 1",
-          "totalOrders": Mchartdata[year]['jul'].week1Orders,
-          "income": Mchartdata[year]['jul'].week1income
-        },
-        {
+        "date": "Jul Week 1",
+        "totalOrders": Mchartdata[year]['jul'].week1Orders,
+        "income": Mchartdata[year]['jul'].week1income
+      },
+      {
 
-          "date": "Jul Week 2",
-          "totalOrders": Mchartdata[year]['jul'].week2Orders,
-          "income": Mchartdata[year]['jul'].week2income
-        },
-        {
+        "date": "Jul Week 2",
+        "totalOrders": Mchartdata[year]['jul'].week2Orders,
+        "income": Mchartdata[year]['jul'].week2income
+      },
+      {
 
-          "date": "Jul Week 3",
-          "totalOrders": Mchartdata[year]['jul'].week3Orders,
-          "income": Mchartdata[year]['jul'].week3income
-        },
-        {
+        "date": "Jul Week 3",
+        "totalOrders": Mchartdata[year]['jul'].week3Orders,
+        "income": Mchartdata[year]['jul'].week3income
+      },
+      {
 
-          "date": "Jul Week 4",
-          "totalOrders": Mchartdata[year]['jul'].week4Orders,
-          "income": Mchartdata[year]['jul'].week4income
-        }
+        "date": "Jul Week 4",
+        "totalOrders": Mchartdata[year]['jul'].week4Orders,
+        "income": Mchartdata[year]['jul'].week4income
+      }
       ],
       'aug': [{
 
-          "date": "Aug Week 1",
-          "totalOrders": Mchartdata[year]['aug'].week1Orders,
-          "income": Mchartdata[year]['aug'].week1income
-        },
-        {
+        "date": "Aug Week 1",
+        "totalOrders": Mchartdata[year]['aug'].week1Orders,
+        "income": Mchartdata[year]['aug'].week1income
+      },
+      {
 
-          "date": "Aug Week 2",
-          "totalOrders": Mchartdata[year]['aug'].week2Orders,
-          "income": Mchartdata[year]['aug'].week2income
-        },
-        {
+        "date": "Aug Week 2",
+        "totalOrders": Mchartdata[year]['aug'].week2Orders,
+        "income": Mchartdata[year]['aug'].week2income
+      },
+      {
 
-          "date": "Aug Week 3",
-          "totalOrders": Mchartdata[year]['aug'].week3Orders,
-          "income": Mchartdata[year]['aug'].week3income
-        },
-        {
+        "date": "Aug Week 3",
+        "totalOrders": Mchartdata[year]['aug'].week3Orders,
+        "income": Mchartdata[year]['aug'].week3income
+      },
+      {
 
-          "date": "Aug Week 4",
-          "totalOrders": Mchartdata[year]['aug'].week4Orders,
-          "income": Mchartdata[year]['aug'].week4income
-        }
+        "date": "Aug Week 4",
+        "totalOrders": Mchartdata[year]['aug'].week4Orders,
+        "income": Mchartdata[year]['aug'].week4income
+      }
       ],
       'sep': [{
 
-          "date": "Sep Week 1",
-          "totalOrders": Mchartdata[year]['sep'].week1Orders,
-          "income": Mchartdata[year]['sep'].week1income
-        },
-        {
+        "date": "Sep Week 1",
+        "totalOrders": Mchartdata[year]['sep'].week1Orders,
+        "income": Mchartdata[year]['sep'].week1income
+      },
+      {
 
-          "date": "Sep Week 2",
-          "totalOrders": Mchartdata[year]['sep'].week2Orders,
-          "income": Mchartdata[year]['sep'].week2income
-        },
-        {
+        "date": "Sep Week 2",
+        "totalOrders": Mchartdata[year]['sep'].week2Orders,
+        "income": Mchartdata[year]['sep'].week2income
+      },
+      {
 
-          "date": "Sep Week 3",
-          "totalOrders": Mchartdata[year]['sep'].week3Orders,
-          "income": Mchartdata[year]['sep'].week3income
-        },
-        {
+        "date": "Sep Week 3",
+        "totalOrders": Mchartdata[year]['sep'].week3Orders,
+        "income": Mchartdata[year]['sep'].week3income
+      },
+      {
 
-          "date": "Sep Week 4",
-          "totalOrders": Mchartdata[year]['sep'].week4Orders,
-          "income": Mchartdata[year]['sep'].week4income
-        }
+        "date": "Sep Week 4",
+        "totalOrders": Mchartdata[year]['sep'].week4Orders,
+        "income": Mchartdata[year]['sep'].week4income
+      }
       ],
       'oct': [{
 
-          "date": "Oct Week 1",
-          "totalOrders": Mchartdata[year]['oct'].week1Orders,
-          "income": Mchartdata[year]['oct'].week1income
-        },
-        {
+        "date": "Oct Week 1",
+        "totalOrders": Mchartdata[year]['oct'].week1Orders,
+        "income": Mchartdata[year]['oct'].week1income
+      },
+      {
 
-          "date": "Oct Week 2",
-          "totalOrders": Mchartdata[year]['oct'].week2Orders,
-          "income": Mchartdata[year]['oct'].week2income
-        },
-        {
+        "date": "Oct Week 2",
+        "totalOrders": Mchartdata[year]['oct'].week2Orders,
+        "income": Mchartdata[year]['oct'].week2income
+      },
+      {
 
-          "date": "Oct Week 3",
-          "totalOrders": Mchartdata[year]['oct'].week3Orders,
-          "income": Mchartdata[year]['oct'].week3income
-        },
-        {
+        "date": "Oct Week 3",
+        "totalOrders": Mchartdata[year]['oct'].week3Orders,
+        "income": Mchartdata[year]['oct'].week3income
+      },
+      {
 
-          "date": "Oct Week 4",
-          "totalOrders": Mchartdata[year]['oct'].week4Orders,
-          "income": Mchartdata[year]['oct'].week4income
-        }
+        "date": "Oct Week 4",
+        "totalOrders": Mchartdata[year]['oct'].week4Orders,
+        "income": Mchartdata[year]['oct'].week4income
+      }
       ],
       'nov': [{
 
-          "date": "Nov Week 1",
-          "totalOrders": Mchartdata[year]['nov'].week1Orders,
-          "income": Mchartdata[year]['nov'].week1income
-        },
-        {
+        "date": "Nov Week 1",
+        "totalOrders": Mchartdata[year]['nov'].week1Orders,
+        "income": Mchartdata[year]['nov'].week1income
+      },
+      {
 
-          "date": "Nov Week 2",
-          "totalOrders": Mchartdata[year]['nov'].week2Orders,
-          "income": Mchartdata[year]['nov'].week2income
-        },
-        {
+        "date": "Nov Week 2",
+        "totalOrders": Mchartdata[year]['nov'].week2Orders,
+        "income": Mchartdata[year]['nov'].week2income
+      },
+      {
 
-          "date": "Nov Week 3",
-          "totalOrders": Mchartdata[year]['nov'].week3Orders,
-          "income": Mchartdata[year]['nov'].week3income
-        },
-        {
+        "date": "Nov Week 3",
+        "totalOrders": Mchartdata[year]['nov'].week3Orders,
+        "income": Mchartdata[year]['nov'].week3income
+      },
+      {
 
-          "date": "Nov Week 4",
-          "totalOrders": Mchartdata[year]['nov'].week4Orders,
-          "income": Mchartdata[year]['nov'].week4income
-        }
+        "date": "Nov Week 4",
+        "totalOrders": Mchartdata[year]['nov'].week4Orders,
+        "income": Mchartdata[year]['nov'].week4income
+      }
       ],
       'dec': [{
 
-          "date": "Dec Week 1",
-          "totalOrders": Mchartdata[year]['dec'].week1Orders,
-          "income": Mchartdata[year]['dec'].week1income
-        },
-        {
+        "date": "Dec Week 1",
+        "totalOrders": Mchartdata[year]['dec'].week1Orders,
+        "income": Mchartdata[year]['dec'].week1income
+      },
+      {
 
-          "date": "Dec Week 2",
-          "totalOrders": Mchartdata[year]['dec'].week2Orders,
-          "income": Mchartdata[year]['dec'].week2income
-        },
-        {
+        "date": "Dec Week 2",
+        "totalOrders": Mchartdata[year]['dec'].week2Orders,
+        "income": Mchartdata[year]['dec'].week2income
+      },
+      {
 
-          "date": "Dec Week 3",
-          "totalOrders": Mchartdata[year]['dec'].week3Orders,
-          "income": Mchartdata[year]['dec'].week3income
-        },
-        {
+        "date": "Dec Week 3",
+        "totalOrders": Mchartdata[year]['dec'].week3Orders,
+        "income": Mchartdata[year]['dec'].week3income
+      },
+      {
 
-          "date": "Dec Week 4",
-          "totalOrders": Mchartdata[year]['dec'].week4Orders,
-          "income": Mchartdata[year]['dec'].week4income
-        }
+        "date": "Dec Week 4",
+        "totalOrders": Mchartdata[year]['dec'].week4Orders,
+        "income": Mchartdata[year]['dec'].week4income
+      }
       ],
 
     };
@@ -1455,4 +1467,64 @@ function genYearBody(datax, year) { //change back to data from datax when real d
     resolve(yearBody);
     console.log(yearBody)
   });
+};
+
+
+module.exports.FullRefund = FullRefund;
+
+// /*TEST:*/ FullRefund('a8d8634c-df6f-454e-c4b3-08d5018d5f26')
+
+function FullRefund(transactionId) {
+  return new Promise((resolve, reject) => {
+    var promiseRetrieveIdTransaction = api.retrieveIdTransaction(transactionId); // check if the transaction can be refunded in our database
+
+    promiseRetrieveIdTransaction.then((value) => {
+      if (value.statusCode >= 200 && value.statusCode <= 299) {
+        if (value.body.transaction_type == 1 && value.body.is_transaction_completed == false) {
+
+          var brainId = value.body.braintree_transaction_id;
+          var userId = value.body.fk_user_id;
+          var merchantId = value.body.fk_merchant_id;
+          var branchId = value.body.fk_branch_id;
+
+          var promiseBtRefund = bt.btRefund(brainId); // refund braintree transaction
+
+          promiseBtRefund.then((value) => {
+            if (value.success == true) {
+              console.log("Successfully refunded in braintree\n")
+              var promiseBtSearch = bt.btSearch(brainId); // search braintree for refund transaction
+
+              promiseBtSearch.then((value) => {
+                if (!value) {
+                  resolve(-1)
+                } else {
+                  console.log("search refundId from bt transaction \n")
+
+                  var promiseCreateTransaction = api.createTransaction(userId, merchantId, branchId, value.refundId, value.amount) // add refund transaction to our database
+
+                  promiseCreateTransaction.then((value) => {
+
+                    console.log(value)
+                    resolve('Create Refund : Transaction Successful');
+
+                  })
+                }
+
+              })
+
+            } else if (value.success == false) {
+              console.log(value.message)
+              resolve(value.message);
+            }
+          });
+
+        } else {
+          console.log("transaction already refunded or cannot be refunded")// either refunded, chargeback, or already completed -- if so, chargeback
+          resolve(-1) // can be resolved as something else
+        }
+      } else {
+        resolve(value);
+      }
+    })
+  })
 };

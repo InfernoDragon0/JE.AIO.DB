@@ -53,7 +53,9 @@ function renderData() {
                         merchantid = merchantID2
                         amount = amount2
                         merchantName = merchantName2
+                        result2 += (index + "")
                         result += ("\n" + "Amount Payable: " + amount + "\n" + "Transaction IDs: " + index + "\n" + "//");
+
                     })
                     swal({
                         title: 'Merchant Name: ' + merchantName,
@@ -66,6 +68,7 @@ function renderData() {
                         inputValidator: function (value) {
                             return new Promise(function (resolve, reject) {
                                 if (value === 'Confirm') {
+                                    sendSelected(result2)
                                     resolve()
                                 } else {
                                     reject('Please type in the word "Confirm" in order to proceed!')

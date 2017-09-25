@@ -81,6 +81,17 @@ function retrieveTransactions() {
                     "transaction_amount": 50,
                     "transaction_type": 2,
                     "is_transaction_complete": false
+                },{
+                    "transaction_id": "90sdfgdgdgfg4b4-08d51218d5f26",
+                    "fk_user_id": 2,
+                    "fk_merchant_id": 2,
+                    "fk_branch_id": 2,
+                    "braintree_transaction_id": "ABC-12345",
+                    "created_at": "2017-08-22T15:45:27.831063",
+                    "modified_at": "2017-08-22T15:45:27.831077",
+                    "transaction_amount": 50,
+                    "transaction_type": 1,
+                    "is_transaction_complete": false
                 },
                 {
                     "transaction_id": "90da1234e8c-0c7c-4a2f-c4b4-08d5018d5f26",
@@ -616,3 +627,82 @@ function commission(value) {
     // console.log(newValue);
     return newCommission;
 };
+
+module.exports.RetrieveTransactionForRefund = RetrieveTransactionForRefund;
+
+RetrieveTransactionForRefund();
+
+function RetrieveTransactionForRefund() {
+    return new Promise((resolve, reject) => {
+
+        var promiseRetrieveTransactions = retrieveTransactions();
+        promiseRetrieveTransactions.then((value) => {
+            // if (value.statusCode >= 200 && value.statusCode <= 299) {
+                    
+                var promiseRetrieveMerchants = retrieveMerchants();
+                promiseRetrieveMerchants.then((data) => {
+                    var array = {body: [],statusCode : 200}
+                for (var i = 0; i < value.body.length; i++) {                    
+                        for (var a = 0; a < data.length; a++) {
+                            if(value.body[i].fk_merchant_id == data[a].merchant_id){
+                            value.body[i].merchant_name = data[a].merchant_name
+
+                            if (value.body[i].transaction_type == 1 && value.body[i].is_transaction_complete == false){
+                                array.body.push(value.body[i])
+                            }
+                            }
+                        }
+                    }
+                    // console.log(array)
+                    // console.log(value)
+                    var promiseGetTime = getTime(array);
+                    promiseGetTime.then((data2)=>{
+                        // console.log(data2.body)
+                        resolve(data2.body)
+                    })
+                })
+            // } else {
+            //     console.log(value);
+            //     resolve(value);
+            // }
+        })
+    }) // close promise
+};
+
+function getTime (data){
+return new Promise ((resolve, reject)=>{
+    for (var i = 0; i< data.body.length; i ++){
+
+        data.body[i].created_at = getDateTime(data.body[i].created_at)
+
+    }
+    // console.log(data)
+    resolve(data)
+})
+}
+
+function getDateTime(date) {
+    
+        var a = new Date(date);
+
+        var hour = a.getHours();
+        hour = (hour < 10 ? "0" : "") + hour;
+    
+        var min  =a.getMinutes();
+        min = (min < 10 ? "0" : "") + min;
+    
+        var sec  = a.getSeconds();
+        sec = (sec < 10 ? "0" : "") + sec;
+    
+        var year = a.getFullYear();
+    
+        var month = a.getMonth() + 1;
+        month = (month < 10 ? "0" : "") + month;
+    
+        var day  = a.getDate();
+        day = (day < 10 ? "0" : "") + day;
+    
+        // console.log( day + "/" + month + "/" + year)
+        // console.log( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+        return ( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
+    }
