@@ -17,6 +17,7 @@
     "express-session": "^1.15.5"
   },
   "dependencies": {
+    "request": "^2.82.0",
     "superagent": "^3.6.0"
   }
 }

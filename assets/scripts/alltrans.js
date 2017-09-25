@@ -1,7 +1,7 @@
 renderData()
 
 function renderData() {
-
+    // console.log("HAHAHA"alldata.replace(/&#34;/g, '"'))
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
     console.log("datajson is" + JSON.stringify(datajson))
 
@@ -13,7 +13,7 @@ function renderData() {
                     <td>{data.fk_user_id}</td>
                     <td>{data.fk_merchant_id}</td>
                     <td>{data.fk_branch_id}</td>
-                    <td>{data.created_at}</td>
+                    <td>{data.datetime}</td>
                     <td>{data.transaction_amount}</td>
                     <td>{data.transaction_type == 0 ? "Pending" :
                          data.transaction_type == 1 ? "Credit Payment" : 
