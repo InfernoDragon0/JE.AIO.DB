@@ -17,3 +17,7 @@ http.send(params);
 function sendSelected(transactions) {
     sendPost("/transactionidstuff", "transactionid=" + transactions)
 }
+
+function sendSelectedforRefund(transactions) {
+    sendPost("/processRefund", "transactionid=" + transactions)
+}

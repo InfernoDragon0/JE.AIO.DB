@@ -11,7 +11,7 @@ function createToken() {
             .send({ "primary_key": primaryKey })
             .end((err, res) => {
                 if (res.statusCode >= 200 && res.statusCode <= 299) {
-                    console.log('\n Retrieve Token: Successful\n')
+                    // console.log('\n Retrieve Token: Successful\n')
                     resolve(res.body.token);
                 }
                 else if (res.statusCode == 401) {
@@ -79,7 +79,7 @@ function retrieveTransactions() {
 
 // /*TEST:*/ createTransaction(1, 10, 123, 'work', 50.00, 2); //
 
-module.exports.createTransaction = createTransaction;
+// module.exports.createTransaction = createTransaction;
 
 function createTransaction(fk_user_id, fk_merchant_id, fk_branch_id, braintree_transaction_id, transaction_amount, transaction_type) {
     return new Promise((resolve, reject) => {
@@ -157,7 +157,7 @@ function retrieveIdTransaction(transaction_id) {
 // Step 1: Retrieve token
 // Step 2: Delete transaction from database by id
 
-// /*TEST:*/ deleteIdTransaction('145a54d4-204b-4769-94ae-08d4fa64f6e5'); /
+// /*TEST:*/ deleteIdTransaction('e6184bdc-16d8-4a2b-89ef-08d503d5c5c9'); 
 
 module.exports.deleteIdTransaction = deleteIdTransaction;
 
@@ -265,6 +265,7 @@ function createSettlement(fk_merchant_id, fk_branch_id, fk_transaction_id, settl
                         "settlement_amount": settlement_amount // integer
                     })
                     .end((err, res) => {
+                        console.log("res"+res)
                         if (res.statusCode >= 200 && res.statusCode <= 299) {
                             console.log('Create Settlement: Settlement Response\n')
                             resolve(res);
@@ -366,7 +367,7 @@ var form = {
 }
 */
 
-// /*TEST:*/ createToken();
+// /*TEST:*/ confirmTransaction('e5614ab7-450a-4c1c-b431-08d5041e93d1');
 
 module.exports.confirmTransaction = confirmTransaction;
 
@@ -375,11 +376,11 @@ function confirmTransaction(transaction_id) {
         var promiseCreateToken = createToken();
         promiseCreateToken.then((value) => {
 
-                request.put(url + '/transaction/completed')
+                request.put(url + '/transaction/'+transaction_id+'/completed?is_transaction_complete=1')
                     .set('Content-Type', 'application/json')
                     .set('Accept', 'application/json')
                     .set('Authorization', 'Bearer ' + value)
-                    .send({ "transaction_id": transaction_id }) // for settlement
+                    // .send({ "transaction_id": transaction_id }) // for settlement
                     .end((err, res) => {
                         if (res.statusCode >= 200 && res.statusCode <= 299) {
                             console.log('Confirm Transaction: Updated transaction\n')

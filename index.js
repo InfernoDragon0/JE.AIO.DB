@@ -4,6 +4,7 @@ var bodyParser = require('body-parser'); //parse POST data
 var session = require('express-session'); //temporary to store sensitive data, see if theres better way
 const databaseReader = require("./nodemodjs/DatabaseReader.js")
 const blokchainReader = require("./nodemodjs/blokchainReader.js")
+const adminDB = require("./nodemodjs/admindb.js")
 const express = require('express'); //express is good
 const app = express();
 const port = 5101;
@@ -69,7 +70,7 @@ app.get('/index', function (req, res) {
 
 app.get('/settled', function (req, res) {
     res.render(path.join(__dirname + '/html/settled_transaction_table.html'), {
-        data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
+        data: JSON.stringify(databaseReader.STdataGen("sample"))
     });
 });
 
@@ -81,6 +82,12 @@ app.get('/unsettled', function (req, res) {
 
 app.get('/tforRefund', function (req, res) {
     res.render(path.join(__dirname + '/html/transaction_for_refund.html'), {
+        data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
+    });
+});
+
+app.get('/chargeback', function (req, res) {
+    res.render(path.join(__dirname + '/html/chargeback_table.html'), {
         data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
     });
 });
@@ -113,7 +120,17 @@ app.post('/transactionidstuff', function (req, res) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    databaseReader.tIDSpliter(req.body.transactionid)
+    databaseReader.InsertSettlementRecord(req.body.transactionid)
+});
+
+
+app.post('/processRefund', function (req, res) {
+    if (!req.body.transactionid) {
+        res.send("<p>Please provide transactionid</p>");
+        return;
+    }
+    console.log("Send to Refund :"+req.body.transactionid )
+    adminDB.FullRefund(req.body.transactionid)
 });
 
 

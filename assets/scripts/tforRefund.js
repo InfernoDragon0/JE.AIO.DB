@@ -1,5 +1,5 @@
 renderData()
-const databaseFunctions = require("../../nodemodjs/DatabaseReader.js")
+// const databaseFunctions = require("../../nodemodjs/DatabaseReader.js")
 function renderData() {
 
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
@@ -91,7 +91,7 @@ function renderData() {
                         date = date2
                         amount = amount2
                         transtype = transtype2
-                        result2 = (transid + "")
+                        result2 = (transid)
                         result += ("\n" + "CustomerID: " + customerid + "\n" + "MerchantID:  " + merchantid + "\n" + "BranchID:  " + branchid + "\n" + "Date:  " + date + "\n" + "Amount:  " + amount + "\n" + "TransactionType:  " + transtype + "\n" + "//");
                     })
                     swal({
@@ -105,7 +105,7 @@ function renderData() {
                         inputValidator: function (value) {
                             return new Promise(function (resolve, reject) {
                                 if (value === 'Confirm') {
-                                    // FullRefund(result2)
+                                    sendSelectedforRefund(result2)
                                     resolve()
                                 } else {
                                     reject('Please type in the word "Confirm" in order to proceed!')

@@ -282,7 +282,7 @@ function RetrievePayment() {
 
 module.exports.FullRefund = FullRefund;
 
-/*TEST:*/ FullRefund('a8d8634c-df6f-454e-c4b3-08d5018d5f26')
+// /*TEST:*/ FullRefund('34b91928-0c1b-4572-b423-08d5041e93d1')
 
 function FullRefund(transactionId) {
     return new Promise((resolve, reject) => {
@@ -305,17 +305,21 @@ function FullRefund(transactionId) {
                             var promiseBtSearch = bt.btSearch(brainId); // search braintree for refund transaction
 
                             promiseBtSearch.then((value) => {
+                                console.log(value)
                                 if (!value) {
                                     resolve(-1)
                                 } else {
                                     console.log("search refundId from bt transaction \n")
 
-                                    var promiseCreateTransaction = api.createTransaction(userId, merchantId, branchId, value.refundId, value.amount) // add refund transaction to our database
+                                    var promiseCreateTransaction = api.createTransactionCreditRefund(userId, merchantId, branchId, value.refundId, value.amount) // add refund transaction to our database
 
                                     promiseCreateTransaction.then((value) => {
 
-                                        console.log(value)
-                                        resolve(value);
+                                        // console.log(value.body)
+                                        var promiseConfirmTransaction = api.confirmTransaction(transactionId);
+                                        promiseConfirmTransaction.then((value2) => {
+                                            // resolve(IdsNotUsable)
+                                        })
 
                                     })
                                 }
@@ -409,7 +413,7 @@ function PartialRefund(transactionId, refundAmount) {
 
 // insert settlement record for transactions about to be settled
 
-module.exports.InsertSettlement = InsertSettlement;
+// module.exports.InsertSettlement = InsertSettlement;
 
 // /*TEST:*/ InsertSettlement("90da4e8c-0c7c-4a8f-c4b4-08d5018d5f26")
 
