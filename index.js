@@ -75,7 +75,7 @@ app.get('/index', function (req, res) {
 
 app.get('/settled', function (req, res) {
     res.render(path.join(__dirname + '/html/settled_transaction_table.html'), {
-        // data: JSON.stringify(databaseReader.STdataGen("sample"))
+        // data: JSON.stringify(databaseReader.STdataGen("sampsle"))
         data: JSON.stringify(databaseReader.SchartdataGEN("sample"))
     });
 });
@@ -102,8 +102,6 @@ app.get('/chargeback', function (req, res) {
 app.get('/settlingTransactions', function (req, res) {
     res.render(path.join(__dirname + '/html/settling_table.html'), {
         data: JSON.stringify(databaseReader.STdataGen("sample"))
-        // data: JSON.stringify(blokchainReader.retrieveData())
-
     });
 });
 
