@@ -19,7 +19,7 @@ app.use(session({
 app.use(bodyParser.json()); // supporting POST data
 app.use(bodyParser.urlencoded({
     extended: true
-})); // supportting POST data
+})); // supporting POST data
 
 /**
  * evals js/css/img folders for JS/CSS/image files
@@ -34,8 +34,6 @@ app.post('/', function (req, res) { //base page
 });
 
 app.get('/', function (req, res) { //base page
-    //dbreader(res)...
-
     databaseReader.genweekBody(databaseReader.Mchartdata, "2017").then((weekvalue) => {
         databaseReader.genYearBody(databaseReader.Mchartdata, "2017").then((yearvalue) => {
             res.render(path.join(__dirname + '/html/merchant_index.html'), {
@@ -45,9 +43,6 @@ app.get('/', function (req, res) { //base page
         })
 
     })
-
-
-
 });
 
 app.get('/login', function (req, res) {
@@ -82,7 +77,6 @@ app.get('/settled', function (req, res) {
     res.render(path.join(__dirname + '/html/settled_transaction_table.html'), {
         // data: JSON.stringify(databaseReader.STdataGen("sample"))
         data: JSON.stringify(databaseReader.SchartdataGEN("sample"))
-        
     });
 });
 
@@ -113,21 +107,11 @@ app.get('/settlingTransactions', function (req, res) {
     });
 });
 
-
 app.get('/blockchain', function (req, res) {
     res.render(path.join(__dirname + '/html/blockchain.html'), {
         data: JSON.stringify(blokchainReader.retrieveData())
     });
 });
-
-app.get('/settleTransactions', function (req, res) {
-    if (!req.query.transactionid) {
-        res.send("<p>Please provide transactionid</p>");
-        return;
-    }
-    databaseReader.tester(req.query.transactionid)
-});
-
 
 /////// Process data from coming from dashboard
 
@@ -139,13 +123,11 @@ app.post('/transactionidstuff', function (req, res) {
     adminDB.InsertSettlementRecord(req.body.transactionid)
 });
 
-
 app.post('/processRefund', function (req, res) {
     if (!req.body.transactionid) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    console.log("Send to Refund :"+req.body.transactionid )
     adminDB.FullRefund(req.body.transactionid)
 });
 
@@ -154,10 +136,8 @@ app.post('/processChargeBack', function (req, res) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    console.log("Send to ChargeBack :"+req.body.transactionid )
     adminDB.InsertChargeback (req.body.transactionid) // to be tested
 });
-
 
 app.use(function (req, res, next) {
     res.status(404).render(path.join(__dirname + '/html/error_404.html'))

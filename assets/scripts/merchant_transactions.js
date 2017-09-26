@@ -1,10 +1,7 @@
 renderData()
 
 function renderData() {
-    // console.log("HAHAHA"alldata.replace(/&#34;/g, '"'))
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
-    console.log("datajson is" + JSON.stringify(datajson))
-    console.log("loaded")
     var filteredMerchantData = []
     for(var counter = 0 ; counter < datajson.length;counter ++){
         if(datajson[counter].fk_merchant_id = merchantID){

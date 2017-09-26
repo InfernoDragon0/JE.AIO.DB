@@ -1,9 +1,6 @@
 renderData()
 function renderData() {
-    // console.log(JSON.stringify(alldata))
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"')).body
-    // console.log(datajson)
-    // console.log("HAHAHAH")
     const SettlingTrow = () => (
         <tbody id="selectable">
             {datajson.map((data, i) => (

@@ -1,20 +1,9 @@
 renderData()
 function renderData() {
-    // console.log(alldata)
-    // var data3 = data2.replace(/'\'/g,'')
-    // console.log(JSON.stringify(data2))
     var data2 = alldata.replace(/&#34;/g, '$')
     var data3 = data2.replace(/\$/g, '\"')
-    
     var result = data3.substring(1, data3.length-1);
-    
-
-    // console.log(JSON.stringify(result))
      var datajson = JSON.parse(result)
-    //  console.log(datajson)
-    // var datajson=JSON.stringify(alldata)
-    // console.log("HAHAHAH")
-    // console.log(datajson)
     const SettledTrow = () => (
         <tbody id="selectable">
             {datajson.map((data, i) => (
@@ -51,6 +40,3 @@ function renderData() {
     
     TableDatatablesButtons.init();
 }
-
-// title: " Merchant ID : "+merchantID,
-// text: "Transaction IDs :"+result2 ,

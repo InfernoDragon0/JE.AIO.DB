@@ -1,18 +1,13 @@
 renderData()
-const databaseFunctions = require("../../nodemodjs/DatabaseReader.js")
 function renderData() {
-
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
-    // console.log("datajson is" + JSON.stringify(datajson))
     var filteredData = []
     for (var counter = 0; counter < datajson.length; counter ++){
-        // console.log(datajson[counter].transaction_type)
         if( datajson[counter].transaction_type == 1 || 
             datajson[counter].transaction_type == 2 ||
             datajson[counter].transaction_type == 3 || 
             datajson[counter].transaction_type == 5 ||
             datajson[counter].transaction_type == 6 ){
-            // console.log(datajson[counter])
             filteredData.push(datajson[counter]);
         }
     }
@@ -60,24 +55,6 @@ function renderData() {
             </table>
         </div>,
         document.getElementById("unsettledtranstable")
-        
-        // () => {
-        //     console.log("rendererd");
-        //     $("#selectable").selectable({
-        //         filter: 'tr',
-        //         stop: function () {
-        //             var result = ""
-        //             $(".ui-selected", this).each(function () {
-        //                 var index = $(this).find(".transactionid").text();
-        //                 result += (index + ",");     
-        //             })
-        //             alert("Selected " + result)
-        //             sendSelected(result);
-        //            // databaseFunctions.tester(index);
-                    
-        //         }
-        //     });
-        // }
     )
     
     TableDatatablesButtons.init();
