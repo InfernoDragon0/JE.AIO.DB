@@ -70,7 +70,9 @@ app.get('/index', function (req, res) {
 
 app.get('/settled', function (req, res) {
     res.render(path.join(__dirname + '/html/settled_transaction_table.html'), {
-        data: JSON.stringify(databaseReader.STdataGen("sample"))
+        // data: JSON.stringify(databaseReader.STdataGen("sample"))
+        data: JSON.stringify(databaseReader.SchartdataGEN("sample"))
+        
     });
 });
 
@@ -99,6 +101,7 @@ app.get('/settlingTransactions', function (req, res) {
 
     });
 });
+
 
 app.get('/blockchain', function (req, res) {
     res.render(path.join(__dirname + '/html/blockchain.html'), {

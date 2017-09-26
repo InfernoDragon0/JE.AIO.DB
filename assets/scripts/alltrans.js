@@ -4,7 +4,7 @@ function renderData() {
     // console.log("HAHAHA"alldata.replace(/&#34;/g, '"'))
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
     console.log("datajson is" + JSON.stringify(datajson))
-
+    
     const AllTrow = () => (
         <tbody>
             {datajson.map((data, i) => (
@@ -16,13 +16,16 @@ function renderData() {
                     <td>{data.datetime}</td>
                     <td>{data.transaction_amount}</td>
                     <td>{data.transaction_type == 0 ? "Pending" :
-                         data.transaction_type == 1 ? "Credit Payment" : 
-                         data.transaction_type == 2 ? "Credit Chargeback" :
-                         data.transaction_type == 3 ? "Credit Refund" :
-                         data.transaction_type == 4 ? "Wallet Top-up" :
-                         data.transaction_type == 5 ? "Wallet Payment" :
-                         data.transaction_type == 6  ? "Wallet Refund":
-                         "-"}</td>
+                        data.transaction_type == 1 ? "Credit Payment" :
+                            data.transaction_type == 2 ? "Credit Chargeback" :
+                                data.transaction_type == 3 ? "Credit Refund" :
+                                    data.transaction_type == 4 ? "Wallet Top-up" :
+                                        data.transaction_type == 5 ? "Wallet Payment" :
+                                            data.transaction_type == 6 ? "Wallet Refund" :
+                                                "-"}</td>
+                    <td>{data.is_transaction_complete == true ? "Y" :
+                        data.is_transaction_complete == false ? "N" :
+                                                "-"}</td>
                 </tr>
 
             ))}
@@ -30,6 +33,7 @@ function renderData() {
     )
 
     ReactDOM.render(
+        
         <div>
             <table className="table table-bordered table-striped table-condensed flip-content" id="sample_test">
                 <thead className="flip-content" >
@@ -42,6 +46,8 @@ function renderData() {
                         <th><i className="fa fa-calendar"></i> Date </th>
                         <th><i className="fa fa-shopping-cart"></i> Amount </th>
                         <th><i className="fa fa-feed"></i> Status </th>
+                        <th><i className="fa fa-feed"></i> Settled </th>
+                        
                     </tr>
                 </thead>
                 <AllTrow />
