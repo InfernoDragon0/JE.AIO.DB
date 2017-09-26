@@ -11,11 +11,11 @@ var Mchartdata;
 var Schartdata;
 
 // retrieve transaction data from DB for adminDB
-var opendata2 =  RetrieveSettlementRecord()
+var opendata2 =  RetrieveSettlementRecord()     // << -- this
 opendata2.then((value)=>{
   Schartdata=JSON.stringify(value)
 })
-var opendata = dbAPI.retrieveTransactions()
+var opendata = dbAPI.retrieveTransactions() // << -- this two are retrieveing data
 opendata.then((value) => {
   ATransactiondata = value.body
   // console.log (ATransactiondata)
@@ -1752,7 +1752,7 @@ function FullRefund(transactionId) {
                 } else {
                   console.log("search refundId from bt transaction \n")
 
-                  var promiseCreateTransaction = dbAPI.createTransaction(userId, merchantId, branchId, value.refundId, value.amount) // add refund transaction to our database
+                  var promiseCreateTransaction = dbAPI.createTransaction(userId, merchantId, branchId, -value.refundId, value.amount) // add refund transaction to our database
 
                   promiseCreateTransaction.then((value) => {
 
