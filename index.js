@@ -63,6 +63,16 @@ app.get('/transactions', function (req, res) {
         data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))
     });
 });
+app.get('/merchantTransactions', function (req, res) {
+    if (!req.query.merchantid) {
+		res.send("<p>Please provide merchantid</p>");
+		return;
+	}
+    res.render(path.join(__dirname + '/html/merchant_transaction_table.html'), {
+        data: JSON.stringify(databaseReader.ATransactiondataGEN("sample")),
+        merchant_id:req.query.merchantid
+    });
+});
 
 app.get('/index', function (req, res) {
     res.render(path.join(__dirname + '/html/index.html'));
@@ -90,7 +100,8 @@ app.get('/tforRefund', function (req, res) {
 
 app.get('/chargeback', function (req, res) {
     res.render(path.join(__dirname + '/html/chargeback_table.html'), {
-        data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
+        data: JSON.stringify(databaseReader.BeforeChargebackGEN("sample"))
+        
     });
 });
 
@@ -118,12 +129,14 @@ app.get('/settleTransactions', function (req, res) {
 });
 
 
+/////// Process data from coming from dashboard
+
 app.post('/transactionidstuff', function (req, res) {
     if (!req.body.transactionid) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    databaseReader.InsertSettlementRecord(req.body.transactionid)
+    adminDB.InsertSettlementRecord(req.body.transactionid)
 });
 
 
@@ -134,6 +147,15 @@ app.post('/processRefund', function (req, res) {
     }
     console.log("Send to Refund :"+req.body.transactionid )
     adminDB.FullRefund(req.body.transactionid)
+});
+
+app.post('/processChargeBack', function (req, res) {
+    if (!req.body.transactionid) {
+        res.send("<p>Please provide transactionid</p>");
+        return;
+    }
+    console.log("Send to ChargeBack :"+req.body.transactionid )
+    adminDB.InsertChargeback (req.body.transactionid) // to be tested
 });
 
 

@@ -21,3 +21,8 @@ function sendSelected(transactions) {
 function sendSelectedforRefund(transactions) {
     sendPost("/processRefund", "transactionid=" + transactions)
 }
+
+
+function sendSelectedforChargeBack(transactions) {
+    sendPost("/processChargeBack", "transactionid=" + transactions)
+}

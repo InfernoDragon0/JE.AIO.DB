@@ -1,11 +1,10 @@
-const dbAPI = require("./databaseApiCallp2.js")
-const dbAPItest = require("./databaseReaderTest.js")
-// const adminFunctions = require("./admindb.js") // cause not connected
+const dbAPI = require("./databaseApiCall.js")
 module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
 module.exports.STdataGen = STdataGen;
 module.exports.STdata = STdata;
 module.exports.BeforeRefundGEN = BeforeRefundGEN;
+module.exports.BeforeChargebackGEN = BeforeChargebackGEN;
 var ATransactiondata;
 var Mchartdata;
 var Schartdata;
@@ -58,21 +57,148 @@ function getDateTime(date) {
 
 var BeforeRefund;
 
-var promiseRetrieveTransactionForRefund = dbAPItest.RetrieveTransactionForRefund();
+var promiseRetrieveTransactionForRefund = RetrieveTransactionForRefund();
 promiseRetrieveTransactionForRefund.then((value) => {
   BeforeRefund = value;
 })
 
+function RetrieveTransactionForRefund() {
+  return new Promise((resolve, reject) => {
+
+      var promiseRetrieveTransactions = dbAPI.retrieveTransactions();
+      promiseRetrieveTransactions.then((value) => {
+          // if (value.statusCode >= 200 && value.statusCode <= 299) {
+          // console.log(value.body)
+          var promiseRetrieveMerchants = dbAPI.retrieveMerchants();
+          promiseRetrieveMerchants.then((data) => {
+              //  console.log(data.body)
+              var array = []
+              for (var i = 0; i < value.body.length; i++) {
+                  for (var a = 0; a < data.body.length; a++) {
+                      if (value.body[i].fk_merchant_id == data.body[a].merchant_id) {
+                          value.body[i].merchant_name = data.body[a].merchant_name
+
+                          if (value.body[i].transaction_type == 1 && value.body[i].is_transaction_complete == false) {
+                              // console.log(value.body[i])
+                              array.push(value.body[i])
+                          };
+                      };
+                  };
+              };
+              // console.log(array)
+              // console.log(value)
+              var promiseGetTime = getTime(array);
+              promiseGetTime.then((data2) => {
+                  console.log(data2)
+                  resolve(data2)
+              })
+          })
+      }) // close promise
+  });
+}
+
+function getTime(data) {
+  return new Promise((resolve, reject) => {
+      for (var i = 0; i < data.length; i++) {
+
+          data[i].created_at = getDateTime(data[i].created_at)
+
+      }
+      // console.log(data)
+      resolve(data)
+  })
+}
+
+
+
+var BeforeChargeback;
+
+var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback();
+promiseRetrieveTransactionForChargeback.then((value) => {
+  BeforeChargeback = value;
+})
+
+function RetrieveTransactionForChargeback() {
+  return new Promise((resolve, reject) => {
+
+      var promiseRetrieveTransactions = dbAPI.retrieveTransactions();
+      promiseRetrieveTransactions.then((value) => {
+          // if (value.statusCode >= 200 && value.statusCode <= 299) {
+          // console.log(value.body)
+          var promiseRetrieveMerchants = dbAPI.retrieveMerchants();
+          promiseRetrieveMerchants.then((data) => {
+              //  console.log(data.body)
+              var array = []
+              for (var i = 0; i < value.body.length; i++) {
+                  for (var a = 0; a < data.body.length; a++) {
+                      if (value.body[i].fk_merchant_id == data.body[a].merchant_id) {
+                          value.body[i].merchant_name = data.body[a].merchant_name
+
+                          if (value.body[i].transaction_type == 1) {
+                              // console.log(value.body[i])
+                              array.push(value.body[i])
+                          };
+                      };
+                  };
+              };
+              // console.log(array)
+              // console.log(value)
+              var promiseGetTime = getTime(array);
+              promiseGetTime.then((data2) => {
+                  console.log(data2)
+                  resolve(data2)
+              })
+          })
+      }) // close promise
+  });
+}
+
 // generate data for Settling Transaction table
 var STdata = {}
-var openSTdata = dbAPItest.buildSTdata()
+var openSTdata = buildSTdata()
 openSTdata.then((newBody) => {
   STdata = {
     "body": newBody
   }
   // console.log(STdata)
 })
+function buildSTdata() {
+  return new Promise((resolve, reject) => {
+      var promiseRetrieveTransaction = dbAPI.retrieveTransactions();
+      promiseRetrieveTransaction.then((value1) => {
+          var array = []
+          var array1 = []
+          var stop = 0;
 
+          for (var a = 0; a < value1.body.length; a++) { // transaction counter     
+              if (value1.body[a].is_transaction_complete == false) {
+                  array.push(value1.body[a].fk_merchant_id)
+              }
+          }
+
+          var unique = array.filter(function (item, i, ar) {
+              return ar.indexOf(item) === i;
+          });
+          // console.log(unique)
+
+          for (var b = 0; b < unique.length; b++) {
+              var promiseLetsMerge = letsMerge(unique[b]);
+              promiseLetsMerge.then((value) => {
+
+
+                  // console.log(value)                    
+                  array1.push(value)
+                  stop++
+                  if (stop === unique.length) {
+                      // console.log(array1)
+                      resolve(array1)
+                  }
+              })
+          }
+
+      })
+  })
+};
 // var STdata2 = {
 //   "body": [{
 //     "merchant_id": 4,
@@ -109,134 +235,10 @@ function tester(transactionID) {
   console.log("test :" + transactionID)
 }
 
-module.exports.InsertSettlementRecord = InsertSettlementRecord
-
-function InsertSettlementRecord(transactionID) {
-  var unsplit = transactionID
-  var splitID = unsplit.split(",")
-  console.log(unsplit)
-  var newArray = []
-  for (var counter = 0; counter < splitID.length - 1; counter++) {
-    // console.log("IDs send to settlement : " + splitID[counter])
-    newArray.push(splitID[counter])
-    // adminFunctions.InsertSettlement(splitID[counter]) /// UNCHECK THIS AND WE ARE DONE
-  }
-  console.log("here" + newArray)
-  InsertSettlement(newArray)
-  // console.log("it worked")
-
-}
-module.exports.InsertSettlement = InsertSettlement
-
-var nam = ["a7b90412-66c0-4451-b424-08d5041e93d1", "1f55f5c1-45b2-4196-b425-08d5041e93d1"]
-// /*TEST:*/ InsertSettlement(nam)
-
-function InsertSettlement(Ids) {
-  return new Promise((resolve, reject) => {
-    var arrayOfBranch = []
-    var stopper = 0
-
-    for (var h = 0; h < Ids.length; h++) {
-      var promiseRetrieveIdTransaction = dbAPI.retrieveIdTransaction(Ids[h])
-      promiseRetrieveIdTransaction.then((value) => {
-
-        // console.log(value[0].body)
-        arrayOfBranch.push(value.body.fk_branch_id)
-
-
-        // console.log("fk"+value.body.fk_branch_id)
-
-      })
-    }
-    // console.log(arrayOfBranch)
-
-
-    // for ( var counter = 0 ; counter < Ids.length ; counter ++ ){
-    //   var newpromise = dbAPI.retrieveIdTransaction(Ids[counter])
-    //   newpromise.then((result)=>{
-    //     // console.log("here")
-    //     // console.log(result.body.fk_branch_id)
-    //         // console.log("haha2"+result.body.fk_branch_id)
-    //         // console.log(arrayOfBranch.length)
-    //         stopper ++
-    //         if(stopper === result.length){
-
-    //         arrayOfBranch.push(result.body.fk_branch_id)
-    //         // stopper++
-    //         }
-    //     // for (var counter2 = 0 ; counter2 < arrayOfBranch.length;counter2++){
-    //     //   if(result.body.fk_branch_id != arrayOfBranch[counter2]){
-    //     //     // console.log("haha"+result.body.fk_branch_id)
-    //     //   }
-    //     // }
-
-    //   })
-
-
-    // } 
-
-    var promiseRetrieveSettlements = dbAPI.retrieveSettlements(); // check if transaction has been settled
-    promiseRetrieveSettlements.then((value) => {
-      var IdsNotUsable = []
-
-      console.log(Ids.length)
-      for (var e = 0; e < Ids.length; e++) {
-        for (var t = 0; t < value.body.length; t++) {
-          if (value.body[t].fk_transaction_id == Ids[e]) {
-            IdsNotUsable.push(Ids[t])
-          }
-        }
-      }
-      console.log(IdsNotUsable.length)
-
-      if (IdsNotUsable.length == 0) {
-        var promiseRetrieveTransactions = dbAPI.retrieveTransactions(); // search for transaction detail from our transaction database
-        promiseRetrieveTransactions.then((value2) => {
-          var money = 0
-          for (var r = 0; r < Ids.length; r++) {
-            for (var u = 0; u < value2.body.length; u++) {
-              if (value2.body[u].transaction_id == Ids[r]) {
-                var money = money + parseInt(commission(value2.body[u].transaction_amount))
-                var merchantId = value2.body[u].fk_merchant_id
-
-              }
-            }
-          }
-          // console.log(money)
-          // console.log("here")
-          var unique = arrayOfBranch.filter(function (item, i, ar) { return ar.indexOf(item) === i });
-          // console.log('test' + unique)
-          // console.log(arrayOfBranch)
-          var promiseCreateSettlement = dbAPI.createSettlement(merchantId, unique.toString(), Ids.toString(), money); // create settlement record
-          promiseCreateSettlement.then((value3) => {
-            // console.log("createSettlement :" + JSON.stringify(value2))
-            for (var y = 0; y < Ids.length; y++) {
-              var promiseConfirmTransaction = dbAPI.confirmTransaction(Ids[y]);
-              promiseConfirmTransaction.then((value4) => {
-                console.log("confirm :" + Ids[y])
-                resolve(IdsNotUsable)
-              })
-            }
-
-          })
-        })
-
-      }
-    })
-
-  }) // close promise
-};
-
-function commission(value) {
-  var newCommission = (value * 0.975) - 0.50
-
-  // console.log(newValue);
-  return newCommission;
-};
 
 module.exports.RetrieveSettlementRecord = RetrieveSettlementRecord;
 
-RetrieveSettlementRecord()
+// RetrieveSettlementRecord()
 
 function RetrieveSettlementRecord() {
   return new Promise((resolve, reject) => {
@@ -281,32 +283,6 @@ function RetrieveSettlementRecord() {
       }
     })
   }) // close promise
-}
-
-function getDateTime(date) {
-
-  var a = new Date(date);
-
-  var hour = a.getHours();
-  hour = (hour < 10 ? "0" : "") + hour;
-
-  var min = a.getMinutes();
-  min = (min < 10 ? "0" : "") + min;
-
-  var sec = a.getSeconds();
-  sec = (sec < 10 ? "0" : "") + sec;
-
-  var year = a.getFullYear();
-
-  var month = a.getMonth() + 1;
-  month = (month < 10 ? "0" : "") + month;
-
-  var day = a.getDate();
-  day = (day < 10 ? "0" : "") + day;
-
-  // console.log( day + "/" + month + "/" + year)
-  // console.log( day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
-  return (day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec);
 }
 
 
@@ -1175,6 +1151,11 @@ function ATransactiondataGEN(input) {
 function BeforeRefundGEN(input) {
   return BeforeRefund
 }
+
+function BeforeChargebackGEN(input) {
+  return BeforeChargeback
+}
+
 module.exports.SchartdataGEN=SchartdataGEN
 function SchartdataGEN(input) {
 
@@ -1722,61 +1703,3 @@ function genYearBody(datax, year) { //change back to data from datax when real d
 };
 
 
-module.exports.FullRefund = FullRefund;
-
-// /*TEST:*/ FullRefund('a8d8634c-df6f-454e-c4b3-08d5018d5f26')
-
-function FullRefund(transactionId) {
-  return new Promise((resolve, reject) => {
-    var promiseRetrieveIdTransaction = dbAPI.retrieveIdTransaction(transactionId); // check if the transaction can be refunded in our database
-
-    promiseRetrieveIdTransaction.then((value) => {
-      if (value.statusCode >= 200 && value.statusCode <= 299) {
-        if (value.body.transaction_type == 1 && value.body.is_transaction_completed == false) {
-
-          var brainId = value.body.braintree_transaction_id;
-          var userId = value.body.fk_user_id;
-          var merchantId = value.body.fk_merchant_id;
-          var branchId = value.body.fk_branch_id;
-
-          var promiseBtRefund = bt.btRefund(brainId); // refund braintree transaction
-
-          promiseBtRefund.then((value) => {
-            if (value.success == true) {
-              console.log("Successfully refunded in braintree\n")
-              var promiseBtSearch = bt.btSearch(brainId); // search braintree for refund transaction
-
-              promiseBtSearch.then((value) => {
-                if (!value) {
-                  resolve(-1)
-                } else {
-                  console.log("search refundId from bt transaction \n")
-
-                  var promiseCreateTransaction = dbAPI.createTransaction(userId, merchantId, branchId, -value.refundId, value.amount) // add refund transaction to our database
-
-                  promiseCreateTransaction.then((value) => {
-
-                    console.log(value)
-                    resolve('Create Refund : Transaction Successful');
-
-                  })
-                }
-
-              })
-
-            } else if (value.success == false) {
-              console.log(value.message)
-              resolve(value.message);
-            }
-          });
-
-        } else {
-          console.log("transaction already refunded or cannot be refunded") // either refunded, chargeback, or already completed -- if so, chargeback
-          resolve(-1) // can be resolved as something else
-        }
-      } else {
-        resolve(value);
-      }
-    })
-  })
-};
