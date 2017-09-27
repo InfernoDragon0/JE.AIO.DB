@@ -2,12 +2,14 @@
 var bt = require('./braintreeApiCall.js')
 var api = require('./databaseApiCall.js')
 var email = require('./emailer.js')
+var databaseReader = require('./DatabaseReader.js')
 
 module.exports.FullRefund = FullRefund;
 module.exports.InsertSettlementRecord = InsertSettlementRecord;
 module.exports.InsertChargeback = InsertChargeback;
 
 // refund full transaction
+
 function FullRefund(transactionId) {
     return new Promise((resolve, reject) => {
         var promiseRetrieveIdTransaction = api.retrieveIdTransaction(transactionId); // check if the transaction can be refunded in our database
@@ -23,10 +25,12 @@ function FullRefund(transactionId) {
                         if (value.success == true) {
                             var promiseBtSearch = bt.btSearch(brainId); // search braintree for refund transaction
                             promiseBtSearch.then((value) => {
-                                console.log(value)
                                 if (!value) {
                                     resolve(-1)
-                                } else {
+                                } else if (value.status == 'submitted_for_settlement'){
+                                    console.log('Braintree payment is not complete')
+                                    resolve(-1)
+                                    }else {
                                     var promiseCreateTransaction = api.createTransactionCreditRefund(userId, merchantId, branchId, value.refundId, value.amount) // add refund transaction to our database
                                     promiseCreateTransaction.then((value) => {
                                         var promiseConfirmTransaction = api.confirmTransaction(transactionId);
@@ -53,6 +57,7 @@ function FullRefund(transactionId) {
 
 // insert settlement record for transactions about to be settled
 function InsertSettlementRecord(transactionID) {
+    return new Promise((resolve, reject) => {
   var unsplit = transactionID
   var splitID = unsplit.split(",")
   var newArray = []
@@ -60,19 +65,20 @@ function InsertSettlementRecord(transactionID) {
     newArray.push(splitID[counter])
   }
   InsertSettlement(newArray)
+  resolve('success')
+    })
 }
-
 function InsertSettlement(Ids) {
   return new Promise((resolve, reject) => {
     var arrayOfBranch = []
     var stopper = 0
     for (var h = 0; h < Ids.length; h++) {
-      var promiseRetrieveIdTransaction = dbAPI.retrieveIdTransaction(Ids[h])
+      var promiseRetrieveIdTransaction = api.retrieveIdTransaction(Ids[h])
       promiseRetrieveIdTransaction.then((value) => {
         arrayOfBranch.push(value.body.fk_branch_id)
       })
     }
-    var promiseRetrieveSettlements = dbAPI.retrieveSettlements(); // check if transaction has been settled
+    var promiseRetrieveSettlements = api.retrieveSettlements(); // check if transaction has been settled
     promiseRetrieveSettlements.then((value) => {
       var IdsNotUsable = []
       for (var e = 0; e < Ids.length; e++) {
@@ -83,7 +89,7 @@ function InsertSettlement(Ids) {
         }
       }
       if (IdsNotUsable.length == 0) {
-        var promiseRetrieveTransactions = dbAPI.retrieveTransactions(); // search for transaction detail from our transaction database
+        var promiseRetrieveTransactions = api.retrieveTransactions(); // search for transaction detail from our transaction database
         promiseRetrieveTransactions.then((value2) => {
           var money = 0
           for (var r = 0; r < Ids.length; r++) {
@@ -95,13 +101,16 @@ function InsertSettlement(Ids) {
             }
           }
           var unique = arrayOfBranch.filter(function (item, i, ar) { return ar.indexOf(item) === i });
-          var promiseCreateSettlement = dbAPI.createSettlement(merchantId, unique.toString(), Ids.toString(), money); // create settlement record
+          var promiseCreateSettlement = api.createSettlement(merchantId, unique.toString(), Ids.toString(), money); // create settlement record
           email.sendSettlementEmail(merchantId,money,'123')
           promiseCreateSettlement.then((value3) => {
             for (var y = 0; y < Ids.length; y++) {
-              var promiseConfirmTransaction = dbAPI.confirmTransaction(Ids[y]);
+              var promiseConfirmTransaction = api.confirmTransaction(Ids[y]);
               promiseConfirmTransaction.then((value4) => {
                 // resolve(IdsNotUsable)
+                console.log("Settlment Completed - final")
+                databaseReader.RefreshData()
+
 
               })
             }
@@ -117,13 +126,16 @@ function commission(value) {
   return newCommission;
 };
 
+// InsertChargeback('1f55f5c1-45b2-4196-b425-08d5041e93d1')
+
 function InsertChargeback(transactionId) {
     new Promise((resolve, reject) => {
         var promiseRetrieveIdTransaction = api.retrieveIdTransaction(transactionId);
         promiseRetrieveIdTransaction.then((value) => {
             if (value.statusCode >= 200 && value.statusCode <= 299) {
                 if (value.body.transaction_type == 1) {
-                    var promiseCreateTransaction = api.createTransactionCreditChargeback(value.body.fk_merchant_id, value.body.fk_branch_id, value.body.transactionId, -value.body.transaction_amount);
+                 
+                    var promiseCreateTransaction = api.createTransactionCreditChargeback(value.body.fk_user_id,value.body.fk_merchant_id, value.body.fk_branch_id, value.body.braintree_transaction_id,value.body.transaction_amount);
                     promiseCreateTransaction.then((value) => {
                         if (value.statusCode >= 200 && value.statusCode <= 299) {
                             var promiseConfirmTransaction = api.confirmTransaction(transactionId);

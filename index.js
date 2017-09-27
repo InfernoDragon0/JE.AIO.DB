@@ -60,12 +60,12 @@ app.get('/transactions', function (req, res) {
 });
 app.get('/merchantTransactions', function (req, res) {
     if (!req.query.merchantid) {
-		res.send("<p>Please provide merchantid</p>");
-		return;
-	}
+        res.send("<p>Please provide merchantid</p>");
+        return;
+    }
     res.render(path.join(__dirname + '/html/merchant_transaction_table.html'), {
         data: JSON.stringify(databaseReader.ATransactiondataGEN("sample")),
-        merchant_id:req.query.merchantid
+        merchant_id: req.query.merchantid
     });
 });
 
@@ -81,8 +81,7 @@ app.get('/settled', function (req, res) {
 
 app.get('/unsettled', function (req, res) {
     res.render(path.join(__dirname + '/html/unsettled_transaction_table.html'), {
-        data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
-        // data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))  if wrong, this is right
+        data: JSON.stringify(databaseReader.BeforeSettleGEN("sample"))
     });
 });
 
@@ -95,7 +94,7 @@ app.get('/tforRefund', function (req, res) {
 app.get('/chargeback', function (req, res) {
     res.render(path.join(__dirname + '/html/chargeback_table.html'), {
         data: JSON.stringify(databaseReader.BeforeChargebackGEN("sample"))
-        
+
     });
 });
 
@@ -118,7 +117,11 @@ app.post('/transactionidstuff', function (req, res) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    adminDB.InsertSettlementRecord(req.body.transactionid)
+    var open = adminDB.InsertSettlementRecord(req.body.transactionid)
+    open.then((value) => {
+        if (value == 'success') {
+        }
+    })
 });
 
 app.post('/processRefund', function (req, res) {
@@ -127,6 +130,7 @@ app.post('/processRefund', function (req, res) {
         return;
     }
     adminDB.FullRefund(req.body.transactionid)
+
 });
 
 app.post('/processChargeBack', function (req, res) {
@@ -134,7 +138,7 @@ app.post('/processChargeBack', function (req, res) {
         res.send("<p>Please provide transactionid</p>");
         return;
     }
-    adminDB.InsertChargeback (req.body.transactionid) // to be tested
+    adminDB.InsertChargeback(req.body.transactionid) // to be tested
 });
 
 app.use(function (req, res, next) {

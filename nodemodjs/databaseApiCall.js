@@ -715,7 +715,7 @@ function createTransactionCreditPayment(fk_user_id, fk_merchant_id, fk_branch_id
     });
 }
 
-function createTransactionCreditChargeback(fk_user_id, fk_merchant_id, fk_branch_id, transaction_amount) {
+function createTransactionCreditChargeback(fk_user_id, fk_merchant_id, fk_branch_id,braintree_transaction_id, transaction_amount) {
     return new Promise((resolve, reject) => {
         var promiseCreateToken = createToken();
         promiseCreateToken.then((value) => {
@@ -728,6 +728,7 @@ function createTransactionCreditChargeback(fk_user_id, fk_merchant_id, fk_branch
                         "fk_user_id": fk_user_id, // integer
                         "fk_merchant_id": fk_merchant_id, // integer
                         "fk_branch_id": fk_branch_id, // integer
+                        "braintree_transaction_id": braintree_transaction_id, // string
                         "transaction_amount": -transaction_amount, // integer
                         "transaction_type": 2 // integer
                       })

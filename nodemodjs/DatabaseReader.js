@@ -9,8 +9,12 @@ module.exports.RetrieveSettlementRecord = RetrieveSettlementRecord;
 module.exports.STdataGen = STdataGen;
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 module.exports.SchartdataGEN = SchartdataGEN;
+module.exports.BeforeSettleGEN = BeforeSettleGEN;
 module.exports.BeforeRefundGEN = BeforeRefundGEN;
 module.exports.BeforeChargebackGEN = BeforeChargebackGEN;
+
+module.exports.RefreshData=RefreshData
+module.exports.formatData=formatData
 
 function STdataGen(input) {
   return STdata
@@ -20,6 +24,9 @@ function ATransactiondataGEN(input) {
 };
 function SchartdataGEN(input) {
   return Schartdata
+};
+function BeforeSettleGEN(input) {
+  return BeforeSettle
 };
 function BeforeRefundGEN(input) {
   return BeforeRefund
@@ -31,9 +38,11 @@ function BeforeChargebackGEN(input) {
 var Schartdata;
 var ATransactiondata;
 var STdata = {};
+var BeforeSettle;
 var BeforeRefund;
 var BeforeChargeback;
 var Mchartdata;
+
 
 var opendata2 = RetrieveSettlementRecord()
 opendata2.then((value) => {
@@ -46,6 +55,9 @@ opendata.then((value) => {
     value.body[i].datetime = getDateTime(value.body[i].created_at)
   }
   ATransactiondata = value.body
+formatData(value.body,2017)  
+// console.log("here")
+// console.log(value.body)
 })
 
 // generate data for Settling Transaction table
@@ -84,6 +96,93 @@ function buildSTdata() {
     })
   })
 };
+function letsMerge(merchant_idd) {
+  return new Promise((resolve, reject) => {
+    openletsMergept1 = letsMergept1(merchant_idd)
+    openletsMergept1.then((body) => {
+      openretrieveMerchants = dbAPI.retrieveMerchants()
+      openretrieveMerchants.then((merchantdata) => {
+        var newBody = body
+        for (var counter = 0; counter < merchantdata.body.length; counter++) {
+          if (merchantdata.body[counter].merchant_id == merchant_idd) {
+            newBody.merchant_name = merchantdata.body[counter].company_name
+          }
+        }
+        resolve(newBody)
+      })
+    })
+  })
+}
+function letsMergept1(merchant_idd) {
+    return new Promise((resolve, reject) => {
+        openPromise1 = dbAPI.retrieveTransactions()
+        openPromise1.then((transaction_result) => {
+            var body = {
+                "merchant_id": 0,
+                "merchant_name": 0,
+                "settlement_amount": 0,
+                "transaction_ids": {}
+            }
+            var amount = 0
+            var newArray = []
+            for (var counter = 0; counter < transaction_result.body.length; counter++) {
+                if(transaction_result.body[counter].is_transaction_complete == false ){
+                if (transaction_result.body[counter].fk_merchant_id == merchant_idd) {
+                    body.merchant_id = merchant_idd
+                    amount = amount + transaction_result.body[counter].transaction_amount
+                    newArray.push(transaction_result.body[counter].transaction_id)
+                }
+            }
+            else{
+            }
+            }
+            body.transaction_ids = newArray
+            body.settlement_amount = amount
+            resolve(body)
+        })
+    })
+}
+
+var promiseRetrieveTransactionForSettle = RetrieveTransactionForSettle();
+promiseRetrieveTransactionForSettle.then((value) => {
+  BeforeSettle = value;
+})
+
+
+function RetrieveTransactionForSettle() {
+  return new Promise((resolve, reject) => {
+    var promiseRetrieveTransactions = dbAPI.retrieveTransactions();
+    promiseRetrieveTransactions.then((value) => {
+      var promiseRetrieveMerchants = dbAPI.retrieveMerchants();
+      promiseRetrieveMerchants.then((data) => {
+        var array = []
+        for (var i = 0; i < value.body.length; i++) {
+          for (var a = 0; a < data.body.length; a++) {
+            if (value.body[i].fk_merchant_id == data.body[a].merchant_id) {
+              value.body[i].merchant_name = data.body[a].merchant_name
+              if (value.body[i].transaction_type == 1 && value.body[i].is_transaction_complete == false) {
+                array.push(value.body[i])
+              } else if (value.body[i].transaction_type == 2 && value.body[i].is_transaction_complete == false) {
+                array.push(value.body[i])
+              } else if (value.body[i].transaction_type == 3 && value.body[i].is_transaction_complete == false) {
+                array.push(value.body[i])
+              } else if (value.body[i].transaction_type == 5 && value.body[i].is_transaction_complete == false) { // wallet payment
+                array.push(value.body[i])
+              } else if (value.body[i].transaction_type == 6 && value.body[i].is_transaction_complete == false) { // wallet refund
+                array.push(value.body[i])
+              }
+            };
+          };
+        };
+        var promiseGetTime = getTime(array);
+        promiseGetTime.then((data2) => {
+          // console.log(data2)
+          resolve(data2)
+        })
+      })
+    }) // close promise
+  });
+}
 
 var promiseRetrieveTransactionForRefund = RetrieveTransactionForRefund();
 promiseRetrieveTransactionForRefund.then((value) => {
@@ -120,6 +219,8 @@ var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback()
 promiseRetrieveTransactionForChargeback.then((value) => {
   BeforeChargeback = value;
 })
+
+
 
 function RetrieveTransactionForChargeback() {
   return new Promise((resolve, reject) => {
@@ -191,8 +292,9 @@ function getDateTime(date) {
   var hour = a.getHours();
   var min = a.getMinutes();
   var sec = a.getSeconds();
-  var year = a.getMonth() + 1;
+  var month = a.getMonth() + 1;
   var day = a.getDate();
+  var year = a.getFullYear();
   hour = (hour < 10 ? "0" : "") + hour;
   min = (min < 10 ? "0" : "") + min;
   sec = (sec < 10 ? "0" : "") + sec;
@@ -408,7 +510,6 @@ function formatData(data, year) {
   var decWk3E = "2017-12-21T23:59:59.999999"
   var decWk4S = "2017-12-22T00:00:00.00000"
   var decWk4E = "2017-12-31T23:59:59.999999"
-
   for (var counter = 0; counter < data.length; counter++) {
     // January
     //JanWeek1
@@ -598,6 +699,7 @@ function formatData(data, year) {
     else if (data[counter].created_at > sepWk4S && data[counter].created_at < sepWk4E) {
       sepWeek4Orders = sepWeek4Orders + 1
       sepWeek4Income = sepWeek4Income + data[counter].transaction_amount
+      // console.log('here')
     }
     // October oct
     //octWeek1
@@ -1141,5 +1243,37 @@ function genYearBody(datax, year) { //change back to data from datax when real d
     resolve(yearBody);
   });
 };
+
+
+/// not use 
+function RefreshData (){
+  var opendata2 = RetrieveSettlementRecord()
+opendata2.then((value) => {
+  Schartdata = JSON.stringify(value)
+  var opendata = dbAPI.retrieveTransactions()
+opendata.then((value) => {
+  for (var i = 0; i < value.body.length; i++) {
+    value.body[i].datetime = getDateTime(value.body[i].created_at)
+  }
+  ATransactiondata = value.body
+})
+})
+var openSTdata = buildSTdata()
+openSTdata.then((newBody) => {
+  STdata = {
+    "body": newBody
+  }
+})
+var promiseRetrieveTransactionForRefund = RetrieveTransactionForRefund();
+promiseRetrieveTransactionForRefund.then((value) => {
+  BeforeRefund = value;
+})
+
+var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback();
+promiseRetrieveTransactionForChargeback.then((value) => {
+  BeforeChargeback = value;
+})
+console.log("data Refreshed")
+}
 
 
