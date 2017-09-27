@@ -56,8 +56,6 @@ opendata.then((value) => {
   }
   ATransactiondata = value.body
 formatData(value.body,2017)  
-// console.log("here")
-// console.log(value.body)
 })
 
 // generate data for Settling Transaction table
