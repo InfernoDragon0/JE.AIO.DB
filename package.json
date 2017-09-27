@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "braintree": "^2.3.0",
+    "nodemailer": "^4.1.1",
     "request": "^2.82.0",
     "superagent": "^3.6.0"
   }

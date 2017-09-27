@@ -1,6 +1,7 @@
 
 var bt = require('./braintreeApiCall.js')
 var api = require('./databaseApiCall.js')
+var email = require('./emailer.js')
 
 module.exports.FullRefund = FullRefund;
 module.exports.InsertSettlementRecord = InsertSettlementRecord;
@@ -95,11 +96,13 @@ function InsertSettlement(Ids) {
           }
           var unique = arrayOfBranch.filter(function (item, i, ar) { return ar.indexOf(item) === i });
           var promiseCreateSettlement = dbAPI.createSettlement(merchantId, unique.toString(), Ids.toString(), money); // create settlement record
+          email.sendSettlementEmail(merchantId,money,'123')
           promiseCreateSettlement.then((value3) => {
             for (var y = 0; y < Ids.length; y++) {
               var promiseConfirmTransaction = dbAPI.confirmTransaction(Ids[y]);
               promiseConfirmTransaction.then((value4) => {
                 // resolve(IdsNotUsable)
+
               })
             }
           })
