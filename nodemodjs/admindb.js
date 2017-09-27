@@ -109,7 +109,7 @@ function InsertSettlement(Ids) {
               promiseConfirmTransaction.then((value4) => {
                 // resolve(IdsNotUsable)
                 console.log("Settlment Completed - final")
-                databaseReader.RefreshData()
+                // databaseReader.RefreshData()
 
 
               })

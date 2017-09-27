@@ -3,14 +3,15 @@ renderData()
 function renderData() {
     var datajson = JSON.parse(alldata.replace(/&#34;/g, '"'))
     var filteredMerchantData = []
+    console.log("merchantid"+merchantID)
     for(var counter = 0 ; counter < datajson.length;counter ++){
-        if(datajson[counter].fk_merchant_id = merchantID){
+        if(datajson[counter].fk_merchant_id == merchantID){
             filteredMerchantData.push(datajson[counter])
         }
     }
     const AllMTransactionRow = () => (
         <tbody>
-            {datajson.map((data, i) => (
+            {filteredMerchantData.map((data, i) => (
                 <tr key={i}>
                     <td>{data.transaction_id}</td>
                     <td>{data.fk_user_id}</td>
