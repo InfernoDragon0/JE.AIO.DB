@@ -82,6 +82,7 @@ app.get('/settled', function (req, res) {
 app.get('/unsettled', function (req, res) {
     res.render(path.join(__dirname + '/html/unsettled_transaction_table.html'), {
         data: JSON.stringify(databaseReader.BeforeRefundGEN("sample"))
+        // data: JSON.stringify(databaseReader.ATransactiondataGEN("sample"))  if wrong, this is right
     });
 });
 

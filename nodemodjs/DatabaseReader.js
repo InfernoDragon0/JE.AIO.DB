@@ -27,9 +27,6 @@ function BeforeRefundGEN(input) {
 function BeforeChargebackGEN(input) {
   return BeforeChargeback
 };
-function dataGENdb(input) {
-  return new Promise(); //for db
-};
 
 var Schartdata;
 var ATransactiondata;
