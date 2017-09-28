@@ -51,11 +51,20 @@ opendata2.then((value) => {
 
 var opendata = dbAPI.retrieveTransactions()
 opendata.then((value) => {
+  // console.log (ATransactiondata)
+  // console.log("yoyo")
+  ATransactiondata = value.body
   for (var i = 0; i < value.body.length; i++) {
     value.body[i].datetime = getDateTime(value.body[i].created_at)
   }
-  ATransactiondata = value.body
-formatData(value.body,2017)  
+
+  // console.log(ATransactiondata)
+  // console.log(value.created_at)
+  // formatData(value, 2017)
+  // ATransactiondata = value
+  console.log(value.length)
+  //console.log(value[0].created_at)
+  formatData(value, 2017)
 })
 
 // generate data for Settling Transaction table
