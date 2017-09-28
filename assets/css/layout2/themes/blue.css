@@ -143,11 +143,11 @@
       .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > .arrow.open:before,
       .page-sidebar .page-sidebar-menu > li > a > .arrow:before,
       .page-sidebar .page-sidebar-menu > li > a > .arrow.open:before {
-        color: #3b5074; }
+        color: #5c5c5c; }
     .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.open > a,
     .page-sidebar .page-sidebar-menu > li:hover > a,
     .page-sidebar .page-sidebar-menu > li.open > a {
-      background: #212d41;
+      background: #5c5c5c;
       color: #e4e9f2; }
       .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li:hover > a > i, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.open > a > i,
       .page-sidebar .page-sidebar-menu > li:hover > a > i,
@@ -184,7 +184,7 @@
     .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow.open:before,
     .page-sidebar .page-sidebar-menu li > a > .arrow:before,
     .page-sidebar .page-sidebar-menu li > a > .arrow.open:before {
-      color: #3b5074; }
+      color: #5c5c5c; }
     .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li:hover > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li:hover > a > .arrow.open:before,
     .page-sidebar .page-sidebar-menu li:hover > a > .arrow:before,
     .page-sidebar .page-sidebar-menu li:hover > a > .arrow.open:before {
@@ -210,7 +210,7 @@
       .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li > a > .arrow.open:before,
       .page-sidebar .page-sidebar-menu .sub-menu > li > a > .arrow:before,
       .page-sidebar .page-sidebar-menu .sub-menu > li > a > .arrow.open:before {
-        color: #3b5074; }
+        color: #5c5c5c; }
     .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.open > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.active > a,
     .page-sidebar .page-sidebar-menu .sub-menu > li:hover > a,
     .page-sidebar .page-sidebar-menu .sub-menu > li.open > a,
