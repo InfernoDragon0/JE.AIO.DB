@@ -44,7 +44,7 @@ function retrieveTransaction() {
             if (error) {
                 return;
             }
-            console.log(body)
+            // console.log(body)
             resolve(body);
         });
     });

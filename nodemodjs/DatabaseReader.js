@@ -29,7 +29,7 @@ function BeforeRefundGEN(input) {
   return BeforeRefund
 };
 function BeforeChargebackGEN(input) {
-  return BeforeChargeback1
+  return BeforeChargeback
 };
 
 var Schartdata;
@@ -38,7 +38,6 @@ var STdata = {};
 var BeforeSettle;
 var BeforeRefund;
 var BeforeChargeback;
-var BeforeChargeback1;
 var Mchartdata;
 readData()
 // Open retrieve data
@@ -80,11 +79,6 @@ promiseRetrieveTransactionForChargeback.then((value) => {
 })
 }
 // end 
-
-var promiseRemoveRepeatChargeback = RemoveRepeatChargeback();
-promiseRemoveRepeatChargeback.then((value)=>{
-  BeforeChargeback1 = value
-})
 
 
 function buildSTdata() {
@@ -236,12 +230,10 @@ function RemoveRepeatChargeback(){
       for (var a = 0; a<value.length; a++){
         for (var b = 0; b< value1.body.length; b++){
           if(value[a].braintree_transaction_id == value1.body[b].braintree_transaction_id && value1.body[b].transaction_type == 2){
-            console.log(a)
             value.splice(0,a)
           }
         }
       }
-      console.log(value)
       resolve (value)
     })
   })
@@ -262,6 +254,13 @@ function RetrieveTransactionForChargeback() {
               value.body[i].merchant_name = data.body[a].merchant_name
               if (value.body[i].transaction_type == 1) {
                 array.push(value.body[i])
+
+                for(var remove = 0; remove < value.body.length; remove++){
+                  if(value.body[i].braintree_transaction_id == value.body[remove].braintree_transaction_id && value.body[remove].transaction_type == 2){
+                    array.splice(0,i)
+                  }
+                }
+
               };
             };
           };

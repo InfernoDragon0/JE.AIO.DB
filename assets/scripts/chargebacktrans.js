@@ -12,7 +12,6 @@ function renderData() {
             filteredData.push(datajson[counter]);
         }
     }
-    console.log(filteredData)
     const ChargebackTrow = () => (
         <tbody id="selectable">
             {filteredData.map((data, i) => (

@@ -21,7 +21,7 @@ function FullRefund(transactionId) {
                     var userId = value.body.fk_user_id;
                     var merchantId = value.body.fk_merchant_id;
                     var branchId = value.body.fk_branch_id;
-                    console.log(brainId)
+                    // console.log(brainId)
                     var promiseBtRefund = bt.btRefund(brainId); // refund braintree transaction
                     promiseBtRefund.then((value) => {
                         if (value.success == true) {
@@ -37,6 +37,11 @@ function FullRefund(transactionId) {
                                     promiseCreateTransaction.then((value) => {
                                         var promiseConfirmTransaction = api.confirmTransaction(transactionId);
                                         promiseConfirmTransaction.then((value2) => {
+                                            setTimeout(function() {
+                                                databaseReader.readData()
+                                                databaseReader.readData()
+                                                console.log('Reloading Data x2');
+                                            }, 3000);
                                             // resolve(IdsNotUsable)
                                         })
                                     })
@@ -52,6 +57,7 @@ function FullRefund(transactionId) {
                     resolve(-1) // can be resolved as something else
                 }
             } else {
+                
                 resolve(value);
             }
         })
@@ -144,6 +150,11 @@ function InsertChargeback(transactionId) {
                         if (value.statusCode >= 200 && value.statusCode <= 299) {
                             var promiseConfirmTransaction = api.confirmTransaction(transactionId);
                             promiseConfirmTransaction.then((value)=>{
+                                setTimeout(function() {
+                                    databaseReader.readData()
+                                    databaseReader.readData()
+                                    console.log('Reloading Data x2');
+                                }, 3000);
                             })
                         } else {
                             resolve(-1)
@@ -154,6 +165,7 @@ function InsertChargeback(transactionId) {
                 }
             } else {
                 resolve(value);
+                
             }
         })
     })// close promise
