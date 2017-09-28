@@ -1,8 +1,8 @@
 var request = require('request');
 
-// var url = "http://138.75.38.233:3000/"
+var url = "http://35.200.27.250:3000/"
 
-var url = "http://localhost:3000/"
+// var url = "http://localhost:3000/"
 
 
 // insertNewClientWallet(123,123,0)
@@ -19,6 +19,8 @@ module.exports.insertNewMerchantWallet = insertNewMerchantWallet;
 module.exports.createTransaction = createTransaction;
 module.exports.createTransactionRefund = createTransactionRefund;
 module.exports.createTransactionTopUpWallet = createTransactionTopUpWallet;
+module.exports.retrieveTransactionByID = retrieveTransactionByID;
+
 
 function processTransaction(clientID, merchantID, amount) {
     return new Promise((resolve, reject) => {
@@ -38,17 +40,33 @@ function processTransaction(clientID, merchantID, amount) {
 // retrieveTransaction();
 function retrieveTransaction() {
     return new Promise((resolve, reject) => {
-        request(url + 'api/system/transactions', function (error, response, body) {
+        request(url + 'api/system/historian', function (error, response, body) {
             if (error) {
-                console.log('error:', error); // Print the error if one occurred 
                 return;
             }
-            // console.log('body:', body);
+            console.log(body)
             resolve(body);
         });
     });
 };
 
+function retrieveTransactionByID(clientid) {
+    return new Promise((resolve, reject) => {
+        request(url + 'api/walletTransactionPay', function (error, response, body) {
+            if (error) {
+                return;
+            }
+            var clientarray = []
+            body = JSON.parse(body)
+            body.forEach(function(element) {
+                if (element.asset == "resource:org.acme.jenetwork.clientWallet#clientWalletID:" + clientid)
+                    clientarray.push(element)
+            });
+            console.log(clientarray)
+            resolve(JSON.stringify(clientarray));
+        });
+    });
+};
 
 
 function getClientWalletByClientID(id) {

@@ -1,8 +1,9 @@
 
-var bt = require('./braintreeApiCall.js')
-var api = require('./databaseApiCall.js')
-var email = require('./emailer.js')
-var databaseReader = require('./DatabaseReader.js')
+const bt = require('./braintreeApiCall.js')
+const api = require('./databaseApiCall.js')
+const email = require('./emailer.js')
+const databaseReader = require('./DatabaseReader.js')
+
 
 module.exports.FullRefund = FullRefund;
 module.exports.InsertSettlementRecord = InsertSettlementRecord;
@@ -20,6 +21,7 @@ function FullRefund(transactionId) {
                     var userId = value.body.fk_user_id;
                     var merchantId = value.body.fk_merchant_id;
                     var branchId = value.body.fk_branch_id;
+                    console.log(brainId)
                     var promiseBtRefund = bt.btRefund(brainId); // refund braintree transaction
                     promiseBtRefund.then((value) => {
                         if (value.success == true) {
@@ -41,6 +43,7 @@ function FullRefund(transactionId) {
                                 }
                             })
                         } else if (value.success == false) {
+                            // console.log(value.message)
                             resolve(value.message);
                         }
                     });
@@ -109,9 +112,10 @@ function InsertSettlement(Ids) {
               promiseConfirmTransaction.then((value4) => {
                 // resolve(IdsNotUsable)
                 console.log("Settlment Completed - final")
-                // databaseReader.RefreshData()
-
-
+                setTimeout(function() {
+                    databaseReader.readData()
+                    console.log('Reloading Data x2');
+                }, 3000);
               })
             }
           })
