@@ -30,8 +30,8 @@
     <script>
         var weekbody = '<%= weekbody %>';
         var yearbody = '<%= yearbody %>';
-        var totalProfit = '<&= totalProfit &>';
-        var totalOrder = '<&= totalOrder &>';
+        var totalProfit = '<%= totalProfit %>';
+        var totalOrder = '<%= totalOrder %>';
         console.log(totalProfit)
         console.log(totalOrder)
     </script>
@@ -188,7 +188,7 @@
                                 <div class="number">
                                     <h3 class="font-red-intense">
                                         <small class="font-red-intense">$</small>
-                                        <span data-counter="counterup" data-value=%totalProfit></span>
+                                        <span id="profittotal" data-counter="counterup">1</span>
                                     </h3>
                                     <small>TOTAL PROFIT</small>
                                 </div>
@@ -211,7 +211,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-purple-medium">
-                                        <span data-counter="counterup" data-value=%totalOrder></span>
+                                        <span id="ordertotal" data-counter="counterup"></span>
                                     </h3>
                                     <small>TOTAL ORDERS</small>
                                 </div>
@@ -363,10 +363,13 @@
                 <script src="scripts/global/quick-sidebar.min.js" type="text/javascript"></script>
                 <script src="scripts/global/quick-nav.min.js" type="text/javascript"></script>
                 <script>
+                    $('#profittotal').attr('data-value', totalProfit)
+                        $('#ordertotal').attr('data-value', totalOrder)
                     $(document).ready(function () {
                         $('#clickmewow').click(function () {
                             $('#radio1003').attr('checked', 'checked');
                         });
+                        
                     })
                 </script>
 </body>
