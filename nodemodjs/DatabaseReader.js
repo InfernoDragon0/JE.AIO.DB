@@ -40,7 +40,6 @@ var BeforeRefund;
 var BeforeChargeback;
 var Mchartdata;
 readData()
-// Open retrieve data
 function readData(){
 var opendata2 = RetrieveSettlementRecord()
 opendata2.then((value) => {
@@ -49,20 +48,20 @@ opendata2.then((value) => {
 
 var opendata = dbAPI.retrieveTransactions()
 opendata.then((value) => {
-  // console.log (ATransactiondata)
-  // console.log("yoyo")
   ATransactiondata = value.body
   for (var i = 0; i < value.body.length; i++) {
     value.body[i].datetime = getDateTime(value.body[i].created_at)
   }
-
-  // console.log(ATransactiondata)
-  // console.log(value.created_at)
-  // formatData(value, 2017)
-  // ATransactiondata = value
-  console.log(value.length)
-  //console.log(value[0].created_at)
-  formatData(value, 2017)
+  var filteredMerchantData = []
+  var merchantid = 11
+  
+  for( var counter = 0 ; counter < value.body.length ; counter ++){
+    if (value.body[counter].fk_merchant_id == merchantid){
+      filteredMerchantData.push(value.body[counter])
+    }
+  }
+  // formate data for mChart
+  formatData(filteredMerchantData, 2017)
 })
 
 var openSTdata = buildSTdata()
@@ -956,11 +955,44 @@ function formatData(data, year) {
 }
 
 ///// Merchant Chart///////
-
+// jan feb mar apr may jun jul aug sep oct nov dec
 //read from db, then send to merchant_index via ejs
 
 module.exports.genweekBody = genweekBody;
 module.exports.genYearBody = genYearBody;
+module.exports.genCounters = genCounters;
+function genCounters(datax,year){
+return new Promise((resolve, reject) => {
+  let counters = {}
+  counters.totalProfit = Mchartdata[year].janIncome+
+                        Mchartdata[year].febIncome+
+                        Mchartdata[year].marIncome+
+                        Mchartdata[year].aprIncome+
+                        Mchartdata[year].mayIncome+
+                        Mchartdata[year].junIncome+
+                        Mchartdata[year].julIncome+
+                        Mchartdata[year].augIncome+
+                        Mchartdata[year].sepIncome+
+                        Mchartdata[year].octIncome+
+                        Mchartdata[year].novIncome+
+                        Mchartdata[year].decIncome
+
+  counters.totalOrder = Mchartdata[year].janTotalOrder+
+                        Mchartdata[year].febTotalOrder+
+                        Mchartdata[year].marTotalOrder+
+                        Mchartdata[year].aprTotalOrder+
+                        Mchartdata[year].mayTotalOrder+
+                        Mchartdata[year].junTotalOrder+
+                        Mchartdata[year].julTotalOrder+
+                        Mchartdata[year].augTotalOrder+
+                        Mchartdata[year].sepTotalOrder+
+                        Mchartdata[year].octTotalOrder+
+                        Mchartdata[year].novTotalOrder+
+                        Mchartdata[year].decTotalOrder+
+                        Mchartdata[year].febTotalOrder
+  resolve(counters)
+})
+}
 
 function genweekBody(datax) { //datax change to data for production
   return new Promise((resolve, reject) => {

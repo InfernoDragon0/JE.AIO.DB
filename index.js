@@ -34,14 +34,18 @@ app.post('/', function (req, res) { //base page
 });
 
 app.get('/', function (req, res) { //base page
-    databaseReader.genweekBody(databaseReader.Mchartdata, "2017").then((weekvalue) => {
-        databaseReader.genYearBody(databaseReader.Mchartdata, "2017").then((yearvalue) => {
-            res.render(path.join(__dirname + '/html/merchant_index.html'), {
-                weekbody: JSON.stringify(weekvalue),
-                yearbody: JSON.stringify(yearvalue)
-            });
+    databaseReader.genweekBody(databaseReader.Mchartdata, 2017).then((weekvalue) => {
+        databaseReader.genYearBody(databaseReader.Mchartdata, 2017).then((yearvalue) => {
+            databaseReader.genCounters(databaseReader.Mchartdata, 2017).then((counter) => {
+                res.render(path.join(__dirname + '/html/merchant_index.html'), {
+                    weekbody: JSON.stringify(weekvalue),
+                    yearbody: JSON.stringify(yearvalue),
+                    totalProfit: counter.totalProfit,
+                    totalOrder: counter.totalOrder
+                });
+                console.log ("here"+counter.totalProfit)
+            })
         })
-
     })
 });
 
@@ -114,7 +118,7 @@ app.get('/blockchain', function (req, res) {
 /////// Process data from coming from dashboard
 
 app.get('/refreshData', function (req, res) {
-    setTimeout(function() {
+    setTimeout(function () {
         databaseReader.readData()
         console.log('Reloading Data x1');
     }, 3000);
@@ -126,7 +130,7 @@ app.post('/transactionidstuff', function (req, res) {
         return;
     }
     var open = adminDB.InsertSettlementRecord(req.body.transactionid)
-    
+
 });
 
 app.post('/processRefund', function (req, res) {
