@@ -2,18 +2,15 @@ const dbAPI = require("./databaseApiCall.js")
 
 module.exports.ATransactiondata = ATransactiondata;
 module.exports.Mchartdata = Mchartdata;
-
 module.exports.STdata = STdata;
 module.exports.RetrieveSettlementRecord = RetrieveSettlementRecord;
-
 module.exports.STdataGen = STdataGen;
 module.exports.ATransactiondataGEN = ATransactiondataGEN;
 module.exports.SchartdataGEN = SchartdataGEN;
 module.exports.BeforeSettleGEN = BeforeSettleGEN;
 module.exports.BeforeRefundGEN = BeforeRefundGEN;
 module.exports.BeforeChargebackGEN = BeforeChargebackGEN;
-
-module.exports.RefreshData=RefreshData
+module.exports.readData=readData
 module.exports.formatData=formatData
 
 function STdataGen(input) {
@@ -42,8 +39,9 @@ var BeforeSettle;
 var BeforeRefund;
 var BeforeChargeback;
 var Mchartdata;
-
-
+readData()
+// Open retrieve data
+function readData(){
 var opendata2 = RetrieveSettlementRecord()
 opendata2.then((value) => {
   Schartdata = JSON.stringify(value)
@@ -67,13 +65,30 @@ opendata.then((value) => {
   formatData(value, 2017)
 })
 
-// generate data for Settling Transaction table
 var openSTdata = buildSTdata()
 openSTdata.then((newBody) => {
   STdata = {
     "body": newBody
   }
 })
+
+var promiseRetrieveTransactionForSettle = RetrieveTransactionForSettle();
+promiseRetrieveTransactionForSettle.then((value) => {
+  BeforeSettle = value;
+})
+
+var promiseRetrieveTransactionForRefund = RetrieveTransactionForRefund();
+promiseRetrieveTransactionForRefund.then((value) => {
+  BeforeRefund = value;
+})
+
+var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback();
+promiseRetrieveTransactionForChargeback.then((value) => {
+  BeforeChargeback = value;
+})
+}
+// end 
+
 
 function buildSTdata() {
   return new Promise((resolve, reject) => {
@@ -150,10 +165,6 @@ function letsMergept1(merchant_idd) {
     })
 }
 
-var promiseRetrieveTransactionForSettle = RetrieveTransactionForSettle();
-promiseRetrieveTransactionForSettle.then((value) => {
-  BeforeSettle = value;
-})
 
 
 function RetrieveTransactionForSettle() {
@@ -191,10 +202,6 @@ function RetrieveTransactionForSettle() {
   });
 }
 
-var promiseRetrieveTransactionForRefund = RetrieveTransactionForRefund();
-promiseRetrieveTransactionForRefund.then((value) => {
-  BeforeRefund = value;
-})
 
 function RetrieveTransactionForRefund() {
   return new Promise((resolve, reject) => {
@@ -222,11 +229,25 @@ function RetrieveTransactionForRefund() {
   });
 }
 
-var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback();
-promiseRetrieveTransactionForChargeback.then((value) => {
-  BeforeChargeback = value;
-})
 
+function RemoveRepeatChargeback(){
+  return new Promise ((resolve,reject)=>{
+  var promiseRetrieveTransactionForChargeback = RetrieveTransactionForChargeback();
+  promiseRetrieveTransactionForChargeback.then((value)=>{
+    var promiseRetrieveTransaction = dbAPI.retrieveTransactions();
+    promiseRetrieveTransaction.then((value1)=>{
+      for (var a = 0; a<value.length; a++){
+        for (var b = 0; b< value1.body.length; b++){
+          if(value[a].braintree_transaction_id == value1.body[b].braintree_transaction_id && value1.body[b].transaction_type == 2){
+            value.splice(0,a)
+          }
+        }
+      }
+      resolve (value)
+    })
+  })
+})// close promise
+};
 
 
 function RetrieveTransactionForChargeback() {
@@ -242,6 +263,13 @@ function RetrieveTransactionForChargeback() {
               value.body[i].merchant_name = data.body[a].merchant_name
               if (value.body[i].transaction_type == 1) {
                 array.push(value.body[i])
+
+                for(var remove = 0; remove < value.body.length; remove++){
+                  if(value.body[i].braintree_transaction_id == value.body[remove].braintree_transaction_id && value.body[remove].transaction_type == 2){
+                    array.splice(0,i)
+                  }
+                }
+
               };
             };
           };

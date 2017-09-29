@@ -110,7 +110,15 @@ app.get('/blockchain', function (req, res) {
     });
 });
 
+
 /////// Process data from coming from dashboard
+
+app.get('/refreshData', function (req, res) {
+    setTimeout(function() {
+        databaseReader.readData()
+        console.log('Reloading Data x1');
+    }, 3000);
+});
 
 app.post('/transactionidstuff', function (req, res) {
     if (!req.body.transactionid) {
@@ -118,10 +126,7 @@ app.post('/transactionidstuff', function (req, res) {
         return;
     }
     var open = adminDB.InsertSettlementRecord(req.body.transactionid)
-    open.then((value) => {
-        if (value == 'success') {
-        }
-    })
+    
 });
 
 app.post('/processRefund', function (req, res) {

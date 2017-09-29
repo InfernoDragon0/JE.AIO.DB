@@ -1,5 +1,6 @@
-var nodemailer = require('nodemailer');
-var api = require('./databaseApiCall.js')
+const nodemailer = require('nodemailer');
+const api = require('./databaseApiCall.js')
+const databaseReader = require('./DatabaseReader.js')
 
 module.exports.sendSettlementEmail=sendSettlementEmail
 
@@ -42,4 +43,8 @@ function sendMail(merchantEmail, Amount, settlementID) {
             console.log('Email sent: ' + info.response);
         }
     });
+    setTimeout(function() {
+        databaseReader.readData()
+        console.log('Reloading Data x1 ');
+    }, 3000);
 }

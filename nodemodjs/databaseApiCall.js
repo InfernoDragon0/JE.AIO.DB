@@ -1,5 +1,6 @@
 const request = require('superagent');
 const databaseConfig = require("./config/databaseConfig.js");
+const databaseReader = require("./DatabaseReader.js")
 
 const url = `${databaseConfig.url}`
 const primaryKey =  `${databaseConfig.primary_key}`
@@ -396,6 +397,7 @@ function confirmTransaction(transaction_id) {
                     })
         })
     });
+  
 }
 
 // Find all merchants
