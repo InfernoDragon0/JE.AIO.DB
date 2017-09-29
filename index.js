@@ -43,7 +43,7 @@ app.get('/', function (req, res) { //base page
                     totalProfit: counter.totalProfit,
                     totalOrder: counter.totalOrder
                 });
-                console.log ("here"+counter.totalProfit)
+                // console.log ("here"+counter.totalProfit)
             })
         })
     })
