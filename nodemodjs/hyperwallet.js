@@ -1,6 +1,6 @@
 var request = require('request');
 
-var url = "http://35.200.27.250:3000/"
+var url = "http://52.163.246.138:3000/"
 
 // var url = "http://localhost:3000/"
 
